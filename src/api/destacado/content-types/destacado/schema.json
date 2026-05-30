@@ -1,0 +1,57 @@
+{
+  "kind": "collectionType",
+  "collectionName": "destacados",
+  "info": {
+    "singularName": "destacado",
+    "pluralName": "destacados",
+    "displayName": "destacado"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "titulo": {
+      "type": "string",
+      "required": true
+    },
+    "descripcion": {
+      "type": "text"
+    },
+    "imagen": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images",
+        "files"
+      ]
+    },
+    "orden": {
+      "type": "integer"
+    },
+    "activa": {
+      "type": "boolean",
+      "default": true
+    },
+    "marca": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::marca.marca"
+    },
+    "modelo": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::modelo.modelo"
+    },
+    "articulo": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::articulo.articulo"
+    },
+    "manual": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::manual.manual"
+    }
+  }
+}

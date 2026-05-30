@@ -452,6 +452,7 @@ export interface ApiArticuloArticulo extends Struct.CollectionTypeSchema {
   };
   attributes: {
     activo: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
+    ano_publicacion: Schema.Attribute.Integer;
     categoria_tematica: Schema.Attribute.Relation<
       'manyToOne',
       'api::categoria-tematica.categoria-tematica'
@@ -461,7 +462,6 @@ export interface ApiArticuloArticulo extends Struct.CollectionTypeSchema {
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
     destacado: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
-    fecha_publicacion: Schema.Attribute.Date & Schema.Attribute.Required;
     imagen_principal: Schema.Attribute.Media<'files' | 'images'>;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
@@ -538,6 +538,42 @@ export interface ApiCategoriaTematicaCategoriaTematica
   };
 }
 
+export interface ApiDestacadoDestacado extends Struct.CollectionTypeSchema {
+  collectionName: 'destacados';
+  info: {
+    displayName: 'destacado';
+    pluralName: 'destacados';
+    singularName: 'destacado';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    activa: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
+    articulo: Schema.Attribute.Relation<'oneToOne', 'api::articulo.articulo'>;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    descripcion: Schema.Attribute.Text;
+    imagen: Schema.Attribute.Media<'images' | 'files'>;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::destacado.destacado'
+    > &
+      Schema.Attribute.Private;
+    manual: Schema.Attribute.Relation<'oneToOne', 'api::manual.manual'>;
+    marca: Schema.Attribute.Relation<'oneToOne', 'api::marca.marca'>;
+    modelo: Schema.Attribute.Relation<'oneToOne', 'api::modelo.modelo'>;
+    orden: Schema.Attribute.Integer;
+    publishedAt: Schema.Attribute.DateTime;
+    titulo: Schema.Attribute.String & Schema.Attribute.Required;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiManualManual extends Struct.CollectionTypeSchema {
   collectionName: 'manuals';
   info: {
@@ -550,6 +586,7 @@ export interface ApiManualManual extends Struct.CollectionTypeSchema {
   };
   attributes: {
     activo: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
+    ano_publicacion: Schema.Attribute.Integer;
     archivo_pdf: Schema.Attribute.Media<'files'>;
     articulos: Schema.Attribute.Relation<
       'manyToMany',
@@ -562,11 +599,11 @@ export interface ApiManualManual extends Struct.CollectionTypeSchema {
       Schema.Attribute.SetMinMaxLength<{
         maxLength: 300;
       }>;
-    fecha_publicacion: Schema.Attribute.Date;
     idioma: Schema.Attribute.Enumeration<
       ['espanol', 'ingles', 'portugues', 'otros']
     > &
       Schema.Attribute.Required;
+    imagen_portada: Schema.Attribute.Media<'images' | 'files'>;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
@@ -1253,6 +1290,7 @@ declare module '@strapi/strapi' {
       'admin::user': AdminUser;
       'api::articulo.articulo': ApiArticuloArticulo;
       'api::categoria-tematica.categoria-tematica': ApiCategoriaTematicaCategoriaTematica;
+      'api::destacado.destacado': ApiDestacadoDestacado;
       'api::manual.manual': ApiManualManual;
       'api::marca.marca': ApiMarcaMarca;
       'api::modelo.modelo': ApiModeloModelo;

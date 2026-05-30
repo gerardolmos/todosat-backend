@@ -47,9 +47,6 @@
         "otros"
       ]
     },
-    "fecha_publicacion": {
-      "type": "date"
-    },
     "oficial": {
       "type": "boolean",
       "default": false
@@ -75,6 +72,17 @@
       "relation": "manyToMany",
       "target": "api::articulo.articulo",
       "inversedBy": "manuals"
+    },
+    "ano_publicacion": {
+      "type": "integer"
+    },
+    "imagen_portada": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images",
+        "files"
+      ]
     }
   }
 }

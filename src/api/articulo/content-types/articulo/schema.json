@@ -51,10 +51,6 @@
         "solucion"
       ]
     },
-    "fecha_publicacion": {
-      "type": "date",
-      "required": true
-    },
     "destacado": {
       "type": "boolean",
       "default": true
@@ -86,6 +82,9 @@
       "relation": "manyToMany",
       "target": "api::manual.manual",
       "mappedBy": "articulos"
+    },
+    "ano_publicacion": {
+      "type": "integer"
     }
   }
 }
