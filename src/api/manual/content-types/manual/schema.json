@@ -1,0 +1,80 @@
+{
+  "kind": "collectionType",
+  "collectionName": "manuals",
+  "info": {
+    "singularName": "manual",
+    "pluralName": "manuals",
+    "displayName": "manual"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "titulo": {
+      "type": "string",
+      "minLength": 5,
+      "maxLength": 150,
+      "required": true,
+      "unique": true
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "titulo"
+    },
+    "descripcion": {
+      "type": "text",
+      "maxLength": 300
+    },
+    "archivo_pdf": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "files"
+      ]
+    },
+    "version": {
+      "type": "string",
+      "maxLength": 30
+    },
+    "idioma": {
+      "type": "enumeration",
+      "required": true,
+      "enum": [
+        "espanol",
+        "ingles",
+        "portugues",
+        "otros"
+      ]
+    },
+    "fecha_publicacion": {
+      "type": "date"
+    },
+    "oficial": {
+      "type": "boolean",
+      "default": false
+    },
+    "activo": {
+      "type": "boolean",
+      "default": true
+    },
+    "marcas": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::marca.marca",
+      "inversedBy": "manuals"
+    },
+    "modelos": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::modelo.modelo",
+      "inversedBy": "manuals"
+    },
+    "articulos": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::articulo.articulo",
+      "inversedBy": "manuals"
+    }
+  }
+}

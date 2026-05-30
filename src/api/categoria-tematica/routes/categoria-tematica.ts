@@ -1,0 +1,7 @@
+/**
+ * categoria-tematica router
+ */
+
+import { factories } from '@strapi/strapi';
+
+export default factories.createCoreRouter('api::categoria-tematica.categoria-tematica');

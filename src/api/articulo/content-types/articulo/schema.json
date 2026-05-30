@@ -1,0 +1,91 @@
+{
+  "kind": "collectionType",
+  "collectionName": "articulos",
+  "info": {
+    "singularName": "articulo",
+    "pluralName": "articulos",
+    "displayName": "articulo"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "titulo": {
+      "type": "string",
+      "minLength": 10,
+      "maxLength": 150,
+      "required": true,
+      "unique": true
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "titulo",
+      "required": true
+    },
+    "subtitulo": {
+      "type": "string",
+      "maxLength": 220
+    },
+    "imagen_principal": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "files",
+        "images"
+      ]
+    },
+    "contenido": {
+      "type": "blocks",
+      "required": true
+    },
+    "tipo_articulo": {
+      "type": "enumeration",
+      "required": true,
+      "enum": [
+        "noticia",
+        "guia",
+        "tutorial",
+        "comparativa",
+        "analisis",
+        "solucion"
+      ]
+    },
+    "fecha_publicacion": {
+      "type": "date",
+      "required": true
+    },
+    "destacado": {
+      "type": "boolean",
+      "default": true
+    },
+    "activo": {
+      "type": "boolean",
+      "default": true
+    },
+    "marcas": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::marca.marca",
+      "inversedBy": "articulos"
+    },
+    "modelos": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::modelo.modelo",
+      "inversedBy": "articulos"
+    },
+    "categoria_tematica": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::categoria-tematica.categoria-tematica",
+      "inversedBy": "articulos"
+    },
+    "manuals": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::manual.manual",
+      "mappedBy": "articulos"
+    }
+  }
+}
