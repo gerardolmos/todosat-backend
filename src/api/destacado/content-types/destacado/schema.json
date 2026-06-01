@@ -27,7 +27,10 @@
       ]
     },
     "orden": {
-      "type": "integer"
+      "type": "integer",
+      "required": true,
+      "unique": true,
+      "max": 6
     },
     "activa": {
       "type": "boolean",

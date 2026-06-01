@@ -85,6 +85,10 @@
       "relation": "manyToMany",
       "target": "api::manual.manual",
       "mappedBy": "marcas"
+    },
+    "destacada": {
+      "type": "boolean",
+      "default": false
     }
   }
 }

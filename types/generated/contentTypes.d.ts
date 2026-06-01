@@ -565,7 +565,15 @@ export interface ApiDestacadoDestacado extends Struct.CollectionTypeSchema {
     manual: Schema.Attribute.Relation<'oneToOne', 'api::manual.manual'>;
     marca: Schema.Attribute.Relation<'oneToOne', 'api::marca.marca'>;
     modelo: Schema.Attribute.Relation<'oneToOne', 'api::modelo.modelo'>;
-    orden: Schema.Attribute.Integer;
+    orden: Schema.Attribute.Integer &
+      Schema.Attribute.Required &
+      Schema.Attribute.Unique &
+      Schema.Attribute.SetMinMax<
+        {
+          max: 6;
+        },
+        number
+      >;
     publishedAt: Schema.Attribute.DateTime;
     titulo: Schema.Attribute.String & Schema.Attribute.Required;
     updatedAt: Schema.Attribute.DateTime;
@@ -658,6 +666,7 @@ export interface ApiMarcaMarca extends Struct.CollectionTypeSchema {
         maxLength: 300;
         minLength: 20;
       }>;
+    destacada: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
     imagen_portada: Schema.Attribute.Media<'images'>;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<'oneToMany', 'api::marca.marca'> &
