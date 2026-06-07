@@ -40,8 +40,7 @@
     },
     "descripcion_corta": {
       "type": "text",
-      "minLength": 20,
-      "maxLength": 300,
+      "maxLength": 50,
       "required": true
     },
     "descripcion_completa": {
@@ -49,16 +48,6 @@
     },
     "web_oficial": {
       "type": "string"
-    },
-    "tipo_orbita": {
-      "type": "enumeration",
-      "enum": [
-        "LEO",
-        "MEO",
-        "GEO",
-        "hibrida",
-        "desconocida"
-      ]
     },
     "pais_origen": {
       "type": "string",
@@ -94,7 +83,8 @@
       "type": "integer"
     },
     "descripcion_home": {
-      "type": "text"
+      "type": "text",
+      "maxLength": 135
     },
     "cobertura": {
       "type": "string"
@@ -121,6 +111,9 @@
       "type": "string"
     },
     "velocidad_descripcion": {
+      "type": "string"
+    },
+    "tipo_orbita": {
       "type": "string"
     }
   }

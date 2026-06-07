@@ -83,6 +83,18 @@
         "images",
         "files"
       ]
+    },
+    "tipo_documento": {
+      "type": "enumeration",
+      "required": true,
+      "enum": [
+        "Manual",
+        "Guía",
+        "Instalación",
+        "Ficha técnica",
+        "Quick Start",
+        "Documentación"
+      ]
     }
   }
 }

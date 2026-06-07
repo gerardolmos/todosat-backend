@@ -44,7 +44,6 @@
       "required": true,
       "enum": [
         "noticia",
-        "guia",
         "tutorial",
         "comparativa",
         "analisis",

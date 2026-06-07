@@ -479,7 +479,7 @@ export interface ApiArticuloArticulo extends Struct.CollectionTypeSchema {
         maxLength: 220;
       }>;
     tipo_articulo: Schema.Attribute.Enumeration<
-      ['noticia', 'guia', 'tutorial', 'comparativa', 'analisis', 'solucion']
+      ['noticia', 'tutorial', 'comparativa', 'analisis', 'solucion']
     > &
       Schema.Attribute.Required;
     titulo: Schema.Attribute.String &
@@ -623,6 +623,17 @@ export interface ApiManualManual extends Struct.CollectionTypeSchema {
     oficial: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
     publishedAt: Schema.Attribute.DateTime;
     slug: Schema.Attribute.UID<'titulo'>;
+    tipo_documento: Schema.Attribute.Enumeration<
+      [
+        'Manual',
+        'Gu\u00EDa',
+        'Instalaci\u00F3n',
+        'Ficha t\u00E9cnica',
+        'Quick Start',
+        'Documentaci\u00F3n',
+      ]
+    > &
+      Schema.Attribute.Required;
     titulo: Schema.Attribute.String &
       Schema.Attribute.Required &
       Schema.Attribute.Unique &
@@ -665,10 +676,12 @@ export interface ApiMarcaMarca extends Struct.CollectionTypeSchema {
     descripcion_corta: Schema.Attribute.Text &
       Schema.Attribute.Required &
       Schema.Attribute.SetMinMaxLength<{
-        maxLength: 300;
-        minLength: 20;
+        maxLength: 50;
       }>;
-    descripcion_home: Schema.Attribute.Text;
+    descripcion_home: Schema.Attribute.Text &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 135;
+      }>;
     imagen_portada: Schema.Attribute.Media<'images'>;
     latencia: Schema.Attribute.String;
     latencia_descripcion: Schema.Attribute.String;
@@ -697,9 +710,7 @@ export interface ApiMarcaMarca extends Struct.CollectionTypeSchema {
     satelites: Schema.Attribute.String;
     satelites_descripcion: Schema.Attribute.String;
     slug: Schema.Attribute.UID<'nombre'> & Schema.Attribute.Required;
-    tipo_orbita: Schema.Attribute.Enumeration<
-      ['LEO', 'MEO', 'GEO', 'hibrida', 'desconocida']
-    >;
+    tipo_orbita: Schema.Attribute.String;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
