@@ -86,9 +86,42 @@
       "target": "api::manual.manual",
       "mappedBy": "marcas"
     },
-    "destacada": {
+    "mostrar_en_home": {
       "type": "boolean",
-      "default": false
+      "default": true
+    },
+    "orden_home": {
+      "type": "integer"
+    },
+    "descripcion_home": {
+      "type": "text"
+    },
+    "cobertura": {
+      "type": "string"
+    },
+    "satelites": {
+      "type": "string"
+    },
+    "latencia": {
+      "type": "string"
+    },
+    "velocidad": {
+      "type": "string"
+    },
+    "cobertura_descripcion": {
+      "type": "string"
+    },
+    "orbita_descripcion": {
+      "type": "string"
+    },
+    "satelites_descripcion": {
+      "type": "string"
+    },
+    "latencia_descripcion": {
+      "type": "string"
+    },
+    "velocidad_descripcion": {
+      "type": "string"
     }
   }
 }

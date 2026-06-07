@@ -656,6 +656,8 @@ export interface ApiMarcaMarca extends Struct.CollectionTypeSchema {
       'manyToMany',
       'api::articulo.articulo'
     >;
+    cobertura: Schema.Attribute.String;
+    cobertura_descripcion: Schema.Attribute.String;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -666,14 +668,18 @@ export interface ApiMarcaMarca extends Struct.CollectionTypeSchema {
         maxLength: 300;
         minLength: 20;
       }>;
-    destacada: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
+    descripcion_home: Schema.Attribute.Text;
     imagen_portada: Schema.Attribute.Media<'images'>;
+    latencia: Schema.Attribute.String;
+    latencia_descripcion: Schema.Attribute.String;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<'oneToMany', 'api::marca.marca'> &
       Schema.Attribute.Private;
     logo: Schema.Attribute.Media<'images' | 'files'>;
     manuals: Schema.Attribute.Relation<'manyToMany', 'api::manual.manual'>;
     modelos: Schema.Attribute.Relation<'oneToMany', 'api::modelo.modelo'>;
+    mostrar_en_home: Schema.Attribute.Boolean &
+      Schema.Attribute.DefaultTo<true>;
     nombre: Schema.Attribute.String &
       Schema.Attribute.Required &
       Schema.Attribute.Unique &
@@ -681,11 +687,15 @@ export interface ApiMarcaMarca extends Struct.CollectionTypeSchema {
         maxLength: 80;
         minLength: 2;
       }>;
+    orbita_descripcion: Schema.Attribute.String;
+    orden_home: Schema.Attribute.Integer;
     pais_origen: Schema.Attribute.String &
       Schema.Attribute.SetMinMaxLength<{
         maxLength: 60;
       }>;
     publishedAt: Schema.Attribute.DateTime;
+    satelites: Schema.Attribute.String;
+    satelites_descripcion: Schema.Attribute.String;
     slug: Schema.Attribute.UID<'nombre'> & Schema.Attribute.Required;
     tipo_orbita: Schema.Attribute.Enumeration<
       ['LEO', 'MEO', 'GEO', 'hibrida', 'desconocida']
@@ -693,6 +703,8 @@ export interface ApiMarcaMarca extends Struct.CollectionTypeSchema {
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    velocidad: Schema.Attribute.String;
+    velocidad_descripcion: Schema.Attribute.String;
     web_oficial: Schema.Attribute.String;
   };
 }
