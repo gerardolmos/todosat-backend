@@ -13,7 +13,6 @@
   "attributes": {
     "titulo": {
       "type": "string",
-      "minLength": 10,
       "maxLength": 150,
       "required": true,
       "unique": true
