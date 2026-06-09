@@ -39,8 +39,8 @@
       ]
     },
     "descripcion_corta": {
-      "type": "text",
-      "maxLength": 50,
+      "type": "string",
+      "maxLength": 40,
       "required": true
     },
     "descripcion_completa": {
@@ -74,13 +74,6 @@
       "relation": "manyToMany",
       "target": "api::manual.manual",
       "mappedBy": "marcas"
-    },
-    "mostrar_en_home": {
-      "type": "boolean",
-      "default": true
-    },
-    "orden_home": {
-      "type": "integer"
     },
     "descripcion_home": {
       "type": "text",

@@ -672,10 +672,10 @@ export interface ApiMarcaMarca extends Struct.CollectionTypeSchema {
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
     descripcion_completa: Schema.Attribute.Blocks;
-    descripcion_corta: Schema.Attribute.Text &
+    descripcion_corta: Schema.Attribute.String &
       Schema.Attribute.Required &
       Schema.Attribute.SetMinMaxLength<{
-        maxLength: 50;
+        maxLength: 40;
       }>;
     descripcion_home: Schema.Attribute.Text &
       Schema.Attribute.SetMinMaxLength<{
@@ -690,8 +690,6 @@ export interface ApiMarcaMarca extends Struct.CollectionTypeSchema {
     logo: Schema.Attribute.Media<'images' | 'files'>;
     manuals: Schema.Attribute.Relation<'manyToMany', 'api::manual.manual'>;
     modelos: Schema.Attribute.Relation<'oneToMany', 'api::modelo.modelo'>;
-    mostrar_en_home: Schema.Attribute.Boolean &
-      Schema.Attribute.DefaultTo<true>;
     nombre: Schema.Attribute.String &
       Schema.Attribute.Required &
       Schema.Attribute.Unique &
@@ -700,7 +698,6 @@ export interface ApiMarcaMarca extends Struct.CollectionTypeSchema {
         minLength: 2;
       }>;
     orbita_descripcion: Schema.Attribute.String;
-    orden_home: Schema.Attribute.Integer;
     pais_origen: Schema.Attribute.String &
       Schema.Attribute.SetMinMaxLength<{
         maxLength: 60;
