@@ -478,10 +478,6 @@ export interface ApiArticuloArticulo extends Struct.CollectionTypeSchema {
       Schema.Attribute.SetMinMaxLength<{
         maxLength: 220;
       }>;
-    tipo_articulo: Schema.Attribute.Enumeration<
-      ['noticia', 'tutorial', 'comparativa', 'analisis', 'solucion']
-    > &
-      Schema.Attribute.Required;
     titulo: Schema.Attribute.String &
       Schema.Attribute.Required &
       Schema.Attribute.Unique &

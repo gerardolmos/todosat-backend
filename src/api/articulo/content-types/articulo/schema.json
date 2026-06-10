@@ -38,17 +38,6 @@
       "type": "blocks",
       "required": true
     },
-    "tipo_articulo": {
-      "type": "enumeration",
-      "required": true,
-      "enum": [
-        "noticia",
-        "tutorial",
-        "comparativa",
-        "analisis",
-        "solucion"
-      ]
-    },
     "destacado": {
       "type": "boolean",
       "default": true
