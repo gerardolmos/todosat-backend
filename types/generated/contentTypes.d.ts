@@ -777,6 +777,19 @@ export interface ApiModeloModelo extends Struct.CollectionTypeSchema {
       >;
     publishedAt: Schema.Attribute.DateTime;
     slug: Schema.Attribute.UID<'nombre'> & Schema.Attribute.Required;
+    tipo_hardware: Schema.Attribute.Enumeration<
+      [
+        'Terminal',
+        'Antena',
+        'Router',
+        'M\u00F3dem',
+        'Tel\u00E9fono satelital',
+        'Amplificador',
+        'IoT',
+        'Mar\u00EDtimo',
+        'Movilidad',
+      ]
+    >;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;

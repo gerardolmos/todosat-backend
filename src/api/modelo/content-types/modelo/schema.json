@@ -99,6 +99,20 @@
     },
     "ano_lanzamiento": {
       "type": "integer"
+    },
+    "tipo_hardware": {
+      "type": "enumeration",
+      "enum": [
+        "Terminal",
+        "Antena",
+        "Router",
+        "Módem",
+        "Teléfono satelital",
+        "Amplificador",
+        "IoT",
+        "Marítimo",
+        "Movilidad"
+      ]
     }
   }
 }
