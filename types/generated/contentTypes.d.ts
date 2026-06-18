@@ -603,7 +603,16 @@ export interface ApiManualManual extends Struct.CollectionTypeSchema {
         maxLength: 300;
       }>;
     idioma: Schema.Attribute.Enumeration<
-      ['espanol', 'ingles', 'portugues', 'otros']
+      [
+        'Espa\u00F1ol',
+        'Ingl\u00E9s',
+        'Franc\u00E9s',
+        'Alem\u00E1n',
+        'Italiano',
+        'Portugu\u00E9s',
+        'Multilenguaje',
+        'Otros',
+      ]
     > &
       Schema.Attribute.Required;
     imagen_portada: Schema.Attribute.Media<'images' | 'files'>;

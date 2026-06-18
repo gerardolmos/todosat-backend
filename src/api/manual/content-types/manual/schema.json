@@ -41,10 +41,14 @@
       "type": "enumeration",
       "required": true,
       "enum": [
-        "espanol",
-        "ingles",
-        "portugues",
-        "otros"
+        "Español",
+        "Inglés",
+        "Francés",
+        "Alemán",
+        "Italiano",
+        "Portugués",
+        "Multilenguaje",
+        "Otros"
       ]
     },
     "oficial": {
