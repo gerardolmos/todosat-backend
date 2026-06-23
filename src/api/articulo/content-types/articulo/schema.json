@@ -70,8 +70,9 @@
       "target": "api::manual.manual",
       "mappedBy": "articulos"
     },
-    "ano_publicacion": {
-      "type": "integer"
+    "fecha_publicacion": {
+      "type": "date",
+      "required": true
     }
   }
 }

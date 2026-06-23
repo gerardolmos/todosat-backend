@@ -452,7 +452,6 @@ export interface ApiArticuloArticulo extends Struct.CollectionTypeSchema {
   };
   attributes: {
     activo: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
-    ano_publicacion: Schema.Attribute.Integer;
     categoria_tematica: Schema.Attribute.Relation<
       'manyToOne',
       'api::categoria-tematica.categoria-tematica'
@@ -462,6 +461,7 @@ export interface ApiArticuloArticulo extends Struct.CollectionTypeSchema {
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
     destacado: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
+    fecha_publicacion: Schema.Attribute.Date & Schema.Attribute.Required;
     imagen_principal: Schema.Attribute.Media<'files' | 'images'>;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
