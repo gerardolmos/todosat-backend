@@ -440,71 +440,19 @@ export interface AdminUser extends Struct.CollectionTypeSchema {
   };
 }
 
-export interface ApiArticuloArticulo extends Struct.CollectionTypeSchema {
-  collectionName: 'articulos';
-  info: {
-    displayName: 'Noticias';
-    pluralName: 'articulos';
-    singularName: 'articulo';
-  };
-  options: {
-    draftAndPublish: true;
-  };
-  attributes: {
-    activo: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
-    categoria_tematica: Schema.Attribute.Relation<
-      'manyToOne',
-      'api::categoria-tematica.categoria-tematica'
-    > &
-      Schema.Attribute.Required;
-    contenido: Schema.Attribute.Blocks & Schema.Attribute.Required;
-    createdAt: Schema.Attribute.DateTime;
-    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
-      Schema.Attribute.Private;
-    destacado: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
-    fecha_publicacion: Schema.Attribute.Date & Schema.Attribute.Required;
-    imagen_principal: Schema.Attribute.Media<'files' | 'images'>;
-    locale: Schema.Attribute.String & Schema.Attribute.Private;
-    localizations: Schema.Attribute.Relation<
-      'oneToMany',
-      'api::articulo.articulo'
-    > &
-      Schema.Attribute.Private;
-    manuals: Schema.Attribute.Relation<'manyToMany', 'api::manual.manual'>;
-    marcas: Schema.Attribute.Relation<'manyToMany', 'api::marca.marca'>;
-    modelos: Schema.Attribute.Relation<'manyToMany', 'api::modelo.modelo'>;
-    publishedAt: Schema.Attribute.DateTime;
-    slug: Schema.Attribute.UID<'titulo'> & Schema.Attribute.Required;
-    subtitulo: Schema.Attribute.String &
-      Schema.Attribute.SetMinMaxLength<{
-        maxLength: 220;
-      }>;
-    titulo: Schema.Attribute.String &
-      Schema.Attribute.Required &
-      Schema.Attribute.Unique &
-      Schema.Attribute.SetMinMaxLength<{
-        maxLength: 150;
-      }>;
-    updatedAt: Schema.Attribute.DateTime;
-    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
-      Schema.Attribute.Private;
-  };
-}
-
-export interface ApiCategoriaTematicaCategoriaTematica
+export interface ApiCategoriaNoticiaCategoriaNoticia
   extends Struct.CollectionTypeSchema {
-  collectionName: 'categoria_tematicas';
+  collectionName: 'categoria_noticias';
   info: {
-    displayName: 'Categor\u00EDas tem\u00E1ticas';
-    pluralName: 'categoria-tematicas';
-    singularName: 'categoria-tematica';
+    displayName: 'Categor\u00EDas de noticias';
+    pluralName: 'categoria-noticias';
+    singularName: 'categoria-noticia';
   };
   options: {
     draftAndPublish: true;
   };
   attributes: {
     activa: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
-    articulos: Schema.Attribute.Relation<'oneToMany', 'api::articulo.articulo'>;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -516,7 +464,7 @@ export interface ApiCategoriaTematicaCategoriaTematica
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
-      'api::categoria-tematica.categoria-tematica'
+      'api::categoria-noticia.categoria-noticia'
     > &
       Schema.Attribute.Private;
     nombre: Schema.Attribute.String &
@@ -526,6 +474,7 @@ export interface ApiCategoriaTematicaCategoriaTematica
         maxLength: 80;
         minLength: 2;
       }>;
+    noticias: Schema.Attribute.Relation<'oneToMany', 'api::noticia.noticia'>;
     publishedAt: Schema.Attribute.DateTime;
     slug: Schema.Attribute.UID<'nombre'> & Schema.Attribute.Required;
     updatedAt: Schema.Attribute.DateTime;
@@ -546,11 +495,11 @@ export interface ApiDestacadoDestacado extends Struct.CollectionTypeSchema {
   };
   attributes: {
     activa: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
-    articulo: Schema.Attribute.Relation<'oneToOne', 'api::articulo.articulo'>;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
     descripcion: Schema.Attribute.Text;
+    hardware: Schema.Attribute.Relation<'oneToOne', 'api::hardware.hardware'>;
     imagen: Schema.Attribute.Media<'images' | 'files'>;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
@@ -559,8 +508,8 @@ export interface ApiDestacadoDestacado extends Struct.CollectionTypeSchema {
     > &
       Schema.Attribute.Private;
     manual: Schema.Attribute.Relation<'oneToOne', 'api::manual.manual'>;
-    marca: Schema.Attribute.Relation<'oneToOne', 'api::marca.marca'>;
-    modelo: Schema.Attribute.Relation<'oneToOne', 'api::modelo.modelo'>;
+    noticia: Schema.Attribute.Relation<'oneToOne', 'api::noticia.noticia'>;
+    operador: Schema.Attribute.Relation<'oneToOne', 'api::operador.operador'>;
     orden: Schema.Attribute.Integer &
       Schema.Attribute.Required &
       Schema.Attribute.Unique &
@@ -579,156 +528,12 @@ export interface ApiDestacadoDestacado extends Struct.CollectionTypeSchema {
   };
 }
 
-export interface ApiManualManual extends Struct.CollectionTypeSchema {
-  collectionName: 'manuals';
-  info: {
-    displayName: 'Manuales';
-    pluralName: 'manuals';
-    singularName: 'manual';
-  };
-  options: {
-    draftAndPublish: true;
-  };
-  attributes: {
-    activo: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
-    ano_publicacion: Schema.Attribute.Integer;
-    archivo_pdf: Schema.Attribute.Media<'files'>;
-    articulos: Schema.Attribute.Relation<
-      'manyToMany',
-      'api::articulo.articulo'
-    >;
-    createdAt: Schema.Attribute.DateTime;
-    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
-      Schema.Attribute.Private;
-    descripcion: Schema.Attribute.Text &
-      Schema.Attribute.SetMinMaxLength<{
-        maxLength: 300;
-      }>;
-    idioma: Schema.Attribute.Enumeration<
-      [
-        'Espa\u00F1ol',
-        'Ingl\u00E9s',
-        'Franc\u00E9s',
-        'Alem\u00E1n',
-        'Italiano',
-        'Portugu\u00E9s',
-        'Multilenguaje',
-        'Otros',
-      ]
-    > &
-      Schema.Attribute.Required;
-    imagen_portada: Schema.Attribute.Media<'images' | 'files'>;
-    locale: Schema.Attribute.String & Schema.Attribute.Private;
-    localizations: Schema.Attribute.Relation<
-      'oneToMany',
-      'api::manual.manual'
-    > &
-      Schema.Attribute.Private;
-    marcas: Schema.Attribute.Relation<'manyToMany', 'api::marca.marca'>;
-    modelos: Schema.Attribute.Relation<'manyToMany', 'api::modelo.modelo'>;
-    oficial: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
-    publishedAt: Schema.Attribute.DateTime;
-    slug: Schema.Attribute.UID<'titulo'> & Schema.Attribute.Required;
-    tipo_documento: Schema.Attribute.Enumeration<
-      [
-        'Manual',
-        'Gu\u00EDa',
-        'Instalaci\u00F3n',
-        'Ficha t\u00E9cnica',
-        'Quick Start',
-        'Documentaci\u00F3n',
-      ]
-    > &
-      Schema.Attribute.Required;
-    titulo: Schema.Attribute.String &
-      Schema.Attribute.Required &
-      Schema.Attribute.Unique &
-      Schema.Attribute.SetMinMaxLength<{
-        maxLength: 150;
-        minLength: 5;
-      }>;
-    updatedAt: Schema.Attribute.DateTime;
-    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
-      Schema.Attribute.Private;
-    version: Schema.Attribute.String &
-      Schema.Attribute.SetMinMaxLength<{
-        maxLength: 30;
-      }>;
-  };
-}
-
-export interface ApiMarcaMarca extends Struct.CollectionTypeSchema {
-  collectionName: 'marcas';
-  info: {
-    displayName: 'Operadores';
-    pluralName: 'marcas';
-    singularName: 'marca';
-  };
-  options: {
-    draftAndPublish: true;
-  };
-  attributes: {
-    activa: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
-    articulos: Schema.Attribute.Relation<
-      'manyToMany',
-      'api::articulo.articulo'
-    >;
-    cobertura: Schema.Attribute.String;
-    cobertura_descripcion: Schema.Attribute.String;
-    createdAt: Schema.Attribute.DateTime;
-    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
-      Schema.Attribute.Private;
-    descripcion_completa: Schema.Attribute.Blocks;
-    descripcion_corta: Schema.Attribute.String &
-      Schema.Attribute.Required &
-      Schema.Attribute.SetMinMaxLength<{
-        maxLength: 40;
-      }>;
-    descripcion_home: Schema.Attribute.Text &
-      Schema.Attribute.SetMinMaxLength<{
-        maxLength: 135;
-      }>;
-    imagen_portada: Schema.Attribute.Media<'images'>;
-    latencia: Schema.Attribute.String;
-    latencia_descripcion: Schema.Attribute.String;
-    locale: Schema.Attribute.String & Schema.Attribute.Private;
-    localizations: Schema.Attribute.Relation<'oneToMany', 'api::marca.marca'> &
-      Schema.Attribute.Private;
-    logo: Schema.Attribute.Media<'images' | 'files'>;
-    manuals: Schema.Attribute.Relation<'manyToMany', 'api::manual.manual'>;
-    modelos: Schema.Attribute.Relation<'oneToMany', 'api::modelo.modelo'>;
-    nombre: Schema.Attribute.String &
-      Schema.Attribute.Required &
-      Schema.Attribute.Unique &
-      Schema.Attribute.SetMinMaxLength<{
-        maxLength: 80;
-        minLength: 2;
-      }>;
-    orbita_descripcion: Schema.Attribute.String;
-    pais_origen: Schema.Attribute.String &
-      Schema.Attribute.SetMinMaxLength<{
-        maxLength: 60;
-      }>;
-    publishedAt: Schema.Attribute.DateTime;
-    satelites: Schema.Attribute.String;
-    satelites_descripcion: Schema.Attribute.String;
-    slug: Schema.Attribute.UID<'nombre'> & Schema.Attribute.Required;
-    tipo_orbita: Schema.Attribute.String;
-    updatedAt: Schema.Attribute.DateTime;
-    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
-      Schema.Attribute.Private;
-    velocidad: Schema.Attribute.String;
-    velocidad_descripcion: Schema.Attribute.String;
-    web_oficial: Schema.Attribute.String;
-  };
-}
-
-export interface ApiModeloModelo extends Struct.CollectionTypeSchema {
-  collectionName: 'modelos';
+export interface ApiHardwareHardware extends Struct.CollectionTypeSchema {
+  collectionName: 'hardwares';
   info: {
     displayName: 'Hardware';
-    pluralName: 'modelos';
-    singularName: 'modelo';
+    pluralName: 'hardwares';
+    singularName: 'hardware';
   };
   options: {
     draftAndPublish: true;
@@ -736,10 +541,6 @@ export interface ApiModeloModelo extends Struct.CollectionTypeSchema {
   attributes: {
     activo: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
     ano_lanzamiento: Schema.Attribute.Integer;
-    articulos: Schema.Attribute.Relation<
-      'manyToMany',
-      'api::articulo.articulo'
-    >;
     consumo: Schema.Attribute.String &
       Schema.Attribute.SetMinMaxLength<{
         maxLength: 50;
@@ -766,12 +567,10 @@ export interface ApiModeloModelo extends Struct.CollectionTypeSchema {
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
-      'api::modelo.modelo'
+      'api::hardware.hardware'
     > &
       Schema.Attribute.Private;
-    manuals: Schema.Attribute.Relation<'manyToMany', 'api::manual.manual'>;
-    marca: Schema.Attribute.Relation<'manyToOne', 'api::marca.marca'> &
-      Schema.Attribute.Required;
+    manuales: Schema.Attribute.Relation<'manyToMany', 'api::manual.manual'>;
     nombre: Schema.Attribute.String &
       Schema.Attribute.Required &
       Schema.Attribute.Unique &
@@ -779,6 +578,9 @@ export interface ApiModeloModelo extends Struct.CollectionTypeSchema {
         maxLength: 100;
         minLength: 2;
       }>;
+    noticias: Schema.Attribute.Relation<'manyToMany', 'api::noticia.noticia'>;
+    operador: Schema.Attribute.Relation<'manyToOne', 'api::operador.operador'> &
+      Schema.Attribute.Required;
     portatil: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
     precio_orientativo: Schema.Attribute.Decimal &
       Schema.Attribute.SetMinMax<
@@ -824,6 +626,210 @@ export interface ApiModeloModelo extends Struct.CollectionTypeSchema {
         },
         number
       >;
+  };
+}
+
+export interface ApiManualManual extends Struct.CollectionTypeSchema {
+  collectionName: 'manuales';
+  info: {
+    displayName: 'Manuales';
+    pluralName: 'manuales';
+    singularName: 'manual';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    activo: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
+    ano_publicacion: Schema.Attribute.Integer;
+    archivo_pdf: Schema.Attribute.Media<'files'>;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    descripcion: Schema.Attribute.Text &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 300;
+      }>;
+    hardwares: Schema.Attribute.Relation<
+      'manyToMany',
+      'api::hardware.hardware'
+    >;
+    idioma: Schema.Attribute.Enumeration<
+      [
+        'Espa\u00F1ol',
+        'Ingl\u00E9s',
+        'Franc\u00E9s',
+        'Alem\u00E1n',
+        'Italiano',
+        'Portugu\u00E9s',
+        'Multilenguaje',
+        'Otros',
+      ]
+    > &
+      Schema.Attribute.Required;
+    imagen_portada: Schema.Attribute.Media<'images' | 'files'>;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::manual.manual'
+    > &
+      Schema.Attribute.Private;
+    noticias: Schema.Attribute.Relation<'manyToMany', 'api::noticia.noticia'>;
+    oficial: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
+    operadores: Schema.Attribute.Relation<
+      'manyToMany',
+      'api::operador.operador'
+    >;
+    publishedAt: Schema.Attribute.DateTime;
+    slug: Schema.Attribute.UID<'titulo'> & Schema.Attribute.Required;
+    tipo_documento: Schema.Attribute.Enumeration<
+      [
+        'Manual',
+        'Gu\u00EDa',
+        'Instalaci\u00F3n',
+        'Ficha t\u00E9cnica',
+        'Quick Start',
+        'Documentaci\u00F3n',
+      ]
+    > &
+      Schema.Attribute.Required;
+    titulo: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.Unique &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 150;
+        minLength: 5;
+      }>;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    version: Schema.Attribute.String &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 30;
+      }>;
+  };
+}
+
+export interface ApiNoticiaNoticia extends Struct.CollectionTypeSchema {
+  collectionName: 'noticias';
+  info: {
+    displayName: 'Noticias';
+    pluralName: 'noticias';
+    singularName: 'noticia';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    activo: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
+    categoria_noticia: Schema.Attribute.Relation<
+      'manyToOne',
+      'api::categoria-noticia.categoria-noticia'
+    > &
+      Schema.Attribute.Required;
+    contenido: Schema.Attribute.Blocks & Schema.Attribute.Required;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    destacado: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
+    fecha_publicacion: Schema.Attribute.Date & Schema.Attribute.Required;
+    hardwares: Schema.Attribute.Relation<
+      'manyToMany',
+      'api::hardware.hardware'
+    >;
+    imagen_principal: Schema.Attribute.Media<'files' | 'images'>;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::noticia.noticia'
+    > &
+      Schema.Attribute.Private;
+    manuales: Schema.Attribute.Relation<'manyToMany', 'api::manual.manual'>;
+    operadores: Schema.Attribute.Relation<
+      'manyToMany',
+      'api::operador.operador'
+    >;
+    publishedAt: Schema.Attribute.DateTime;
+    slug: Schema.Attribute.UID<'titulo'> & Schema.Attribute.Required;
+    subtitulo: Schema.Attribute.String &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 220;
+      }>;
+    titulo: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.Unique &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 150;
+      }>;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiOperadorOperador extends Struct.CollectionTypeSchema {
+  collectionName: 'operadores';
+  info: {
+    displayName: 'Operadores';
+    pluralName: 'operadores';
+    singularName: 'operador';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    activa: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
+    cobertura: Schema.Attribute.String;
+    cobertura_descripcion: Schema.Attribute.String;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    descripcion_completa: Schema.Attribute.Blocks;
+    descripcion_corta: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 40;
+      }>;
+    descripcion_home: Schema.Attribute.Text &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 135;
+      }>;
+    hardwares: Schema.Attribute.Relation<'oneToMany', 'api::hardware.hardware'>;
+    imagen_portada: Schema.Attribute.Media<'images'>;
+    latencia: Schema.Attribute.String;
+    latencia_descripcion: Schema.Attribute.String;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::operador.operador'
+    > &
+      Schema.Attribute.Private;
+    logo: Schema.Attribute.Media<'images' | 'files'>;
+    manuales: Schema.Attribute.Relation<'manyToMany', 'api::manual.manual'>;
+    nombre: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.Unique &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 80;
+        minLength: 2;
+      }>;
+    noticias: Schema.Attribute.Relation<'manyToMany', 'api::noticia.noticia'>;
+    orbita_descripcion: Schema.Attribute.String;
+    pais_origen: Schema.Attribute.String &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 60;
+      }>;
+    publishedAt: Schema.Attribute.DateTime;
+    satelites: Schema.Attribute.String;
+    satelites_descripcion: Schema.Attribute.String;
+    slug: Schema.Attribute.UID<'nombre'> & Schema.Attribute.Required;
+    tipo_orbita: Schema.Attribute.String;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    velocidad: Schema.Attribute.String;
+    velocidad_descripcion: Schema.Attribute.String;
+    web_oficial: Schema.Attribute.String;
   };
 }
 
@@ -1338,12 +1344,12 @@ declare module '@strapi/strapi' {
       'admin::transfer-token': AdminTransferToken;
       'admin::transfer-token-permission': AdminTransferTokenPermission;
       'admin::user': AdminUser;
-      'api::articulo.articulo': ApiArticuloArticulo;
-      'api::categoria-tematica.categoria-tematica': ApiCategoriaTematicaCategoriaTematica;
+      'api::categoria-noticia.categoria-noticia': ApiCategoriaNoticiaCategoriaNoticia;
       'api::destacado.destacado': ApiDestacadoDestacado;
+      'api::hardware.hardware': ApiHardwareHardware;
       'api::manual.manual': ApiManualManual;
-      'api::marca.marca': ApiMarcaMarca;
-      'api::modelo.modelo': ApiModeloModelo;
+      'api::noticia.noticia': ApiNoticiaNoticia;
+      'api::operador.operador': ApiOperadorOperador;
       'plugin::content-releases.release': PluginContentReleasesRelease;
       'plugin::content-releases.release-action': PluginContentReleasesReleaseAction;
       'plugin::i18n.locale': PluginI18NLocale;

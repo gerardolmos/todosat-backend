@@ -1,9 +1,9 @@
 {
   "kind": "collectionType",
-  "collectionName": "manuals",
+  "collectionName": "manuales",
   "info": {
     "singularName": "manual",
-    "pluralName": "manuals",
+    "pluralName": "manuales",
     "displayName": "Manuales"
   },
   "options": {
@@ -60,24 +60,6 @@
       "type": "boolean",
       "default": true
     },
-    "marcas": {
-      "type": "relation",
-      "relation": "manyToMany",
-      "target": "api::marca.marca",
-      "inversedBy": "manuals"
-    },
-    "modelos": {
-      "type": "relation",
-      "relation": "manyToMany",
-      "target": "api::modelo.modelo",
-      "inversedBy": "manuals"
-    },
-    "articulos": {
-      "type": "relation",
-      "relation": "manyToMany",
-      "target": "api::articulo.articulo",
-      "inversedBy": "manuals"
-    },
     "ano_publicacion": {
       "type": "integer"
     },
@@ -100,6 +82,24 @@
         "Quick Start",
         "Documentación"
       ]
+    },
+    "operadores": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::operador.operador",
+      "inversedBy": "manuales"
+    },
+    "hardwares": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::hardware.hardware",
+      "inversedBy": "manuales"
+    },
+    "noticias": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::noticia.noticia",
+      "inversedBy": "manuales"
     }
   }
 }

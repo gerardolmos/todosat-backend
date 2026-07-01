@@ -37,25 +37,25 @@
       "type": "boolean",
       "default": true
     },
-    "marca": {
-      "type": "relation",
-      "relation": "oneToOne",
-      "target": "api::marca.marca"
-    },
-    "modelo": {
-      "type": "relation",
-      "relation": "oneToOne",
-      "target": "api::modelo.modelo"
-    },
-    "articulo": {
-      "type": "relation",
-      "relation": "oneToOne",
-      "target": "api::articulo.articulo"
-    },
     "manual": {
       "type": "relation",
       "relation": "oneToOne",
       "target": "api::manual.manual"
+    },
+    "operador": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::operador.operador"
+    },
+    "hardware": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::hardware.hardware"
+    },
+    "noticia": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::noticia.noticia"
     }
   }
 }

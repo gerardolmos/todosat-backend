@@ -1,0 +1,120 @@
+{
+  "kind": "collectionType",
+  "collectionName": "hardwares",
+  "info": {
+    "singularName": "hardware",
+    "pluralName": "hardwares",
+    "displayName": "Hardware"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "nombre": {
+      "type": "string",
+      "minLength": 2,
+      "maxLength": 100,
+      "required": true,
+      "unique": true
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "nombre",
+      "required": true
+    },
+    "imagen_principal": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "files",
+        "images"
+      ]
+    },
+    "galeria": {
+      "type": "media",
+      "multiple": true,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "descripcion_corta": {
+      "type": "text",
+      "minLength": 20,
+      "maxLength": 300,
+      "required": true
+    },
+    "descripcion_completa": {
+      "type": "blocks"
+    },
+    "velocidad_descarga": {
+      "type": "integer",
+      "min": 1
+    },
+    "velocidad_subida": {
+      "type": "integer",
+      "min": 1
+    },
+    "latencia": {
+      "type": "integer",
+      "min": 1
+    },
+    "consumo": {
+      "type": "string",
+      "maxLength": 50
+    },
+    "portatil": {
+      "type": "boolean",
+      "default": false
+    },
+    "uso_recomendado": {
+      "type": "string",
+      "maxLength": 120
+    },
+    "precio_orientativo": {
+      "type": "decimal",
+      "min": 0
+    },
+    "activo": {
+      "type": "boolean",
+      "default": true
+    },
+    "ano_lanzamiento": {
+      "type": "integer"
+    },
+    "tipo_hardware": {
+      "type": "enumeration",
+      "required": true,
+      "enum": [
+        "Terminal",
+        "Antena",
+        "Router",
+        "Módem",
+        "Teléfono satelital",
+        "Amplificador",
+        "IoT",
+        "Marítimo",
+        "Movilidad"
+      ]
+    },
+    "operador": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::operador.operador",
+      "inversedBy": "hardwares",
+      "required": true
+    },
+    "noticias": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::noticia.noticia",
+      "mappedBy": "hardwares"
+    },
+    "manuales": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::manual.manual",
+      "mappedBy": "hardwares"
+    }
+  }
+}

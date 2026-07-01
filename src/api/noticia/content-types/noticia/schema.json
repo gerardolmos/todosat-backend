@@ -1,0 +1,79 @@
+{
+  "kind": "collectionType",
+  "collectionName": "noticias",
+  "info": {
+    "singularName": "noticia",
+    "pluralName": "noticias",
+    "displayName": "Noticias"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "titulo": {
+      "type": "string",
+      "maxLength": 150,
+      "required": true,
+      "unique": true
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "titulo",
+      "required": true
+    },
+    "subtitulo": {
+      "type": "string",
+      "maxLength": 220
+    },
+    "imagen_principal": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "files",
+        "images"
+      ]
+    },
+    "contenido": {
+      "type": "blocks",
+      "required": true
+    },
+    "destacado": {
+      "type": "boolean",
+      "default": true
+    },
+    "activo": {
+      "type": "boolean",
+      "default": true
+    },
+    "fecha_publicacion": {
+      "type": "date",
+      "required": true
+    },
+    "operadores": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::operador.operador",
+      "inversedBy": "noticias"
+    },
+    "hardwares": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::hardware.hardware",
+      "inversedBy": "noticias"
+    },
+    "categoria_noticia": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::categoria-noticia.categoria-noticia",
+      "inversedBy": "noticias",
+      "required": true
+    },
+    "manuales": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::manual.manual",
+      "mappedBy": "noticias"
+    }
+  }
+}
