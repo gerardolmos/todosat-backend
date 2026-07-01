@@ -83,7 +83,8 @@
       "type": "relation",
       "relation": "manyToOne",
       "target": "api::marca.marca",
-      "inversedBy": "modelos"
+      "inversedBy": "modelos",
+      "required": true
     },
     "articulos": {
       "type": "relation",
@@ -102,6 +103,7 @@
     },
     "tipo_hardware": {
       "type": "enumeration",
+      "required": true,
       "enum": [
         "Terminal",
         "Antena",

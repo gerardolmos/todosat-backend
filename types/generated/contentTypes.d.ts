@@ -455,7 +455,8 @@ export interface ApiArticuloArticulo extends Struct.CollectionTypeSchema {
     categoria_tematica: Schema.Attribute.Relation<
       'manyToOne',
       'api::categoria-tematica.categoria-tematica'
-    >;
+    > &
+      Schema.Attribute.Required;
     contenido: Schema.Attribute.Blocks & Schema.Attribute.Required;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
@@ -526,7 +527,7 @@ export interface ApiCategoriaTematicaCategoriaTematica
         minLength: 2;
       }>;
     publishedAt: Schema.Attribute.DateTime;
-    slug: Schema.Attribute.UID<'nombre'>;
+    slug: Schema.Attribute.UID<'nombre'> & Schema.Attribute.Required;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -627,7 +628,7 @@ export interface ApiManualManual extends Struct.CollectionTypeSchema {
     modelos: Schema.Attribute.Relation<'manyToMany', 'api::modelo.modelo'>;
     oficial: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
     publishedAt: Schema.Attribute.DateTime;
-    slug: Schema.Attribute.UID<'titulo'>;
+    slug: Schema.Attribute.UID<'titulo'> & Schema.Attribute.Required;
     tipo_documento: Schema.Attribute.Enumeration<
       [
         'Manual',
@@ -769,7 +770,8 @@ export interface ApiModeloModelo extends Struct.CollectionTypeSchema {
     > &
       Schema.Attribute.Private;
     manuals: Schema.Attribute.Relation<'manyToMany', 'api::manual.manual'>;
-    marca: Schema.Attribute.Relation<'manyToOne', 'api::marca.marca'>;
+    marca: Schema.Attribute.Relation<'manyToOne', 'api::marca.marca'> &
+      Schema.Attribute.Required;
     nombre: Schema.Attribute.String &
       Schema.Attribute.Required &
       Schema.Attribute.Unique &
@@ -799,7 +801,8 @@ export interface ApiModeloModelo extends Struct.CollectionTypeSchema {
         'Mar\u00EDtimo',
         'Movilidad',
       ]
-    >;
+    > &
+      Schema.Attribute.Required;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;

@@ -62,7 +62,8 @@
       "type": "relation",
       "relation": "manyToOne",
       "target": "api::categoria-tematica.categoria-tematica",
-      "inversedBy": "articulos"
+      "inversedBy": "articulos",
+      "required": true
     },
     "manuals": {
       "type": "relation",
