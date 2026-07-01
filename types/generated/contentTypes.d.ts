@@ -443,7 +443,7 @@ export interface AdminUser extends Struct.CollectionTypeSchema {
 export interface ApiArticuloArticulo extends Struct.CollectionTypeSchema {
   collectionName: 'articulos';
   info: {
-    displayName: 'articulo';
+    displayName: 'Noticias';
     pluralName: 'articulos';
     singularName: 'articulo';
   };
@@ -494,7 +494,7 @@ export interface ApiCategoriaTematicaCategoriaTematica
   extends Struct.CollectionTypeSchema {
   collectionName: 'categoria_tematicas';
   info: {
-    displayName: 'categoria-tematica';
+    displayName: 'Categor\u00EDas tem\u00E1ticas';
     pluralName: 'categoria-tematicas';
     singularName: 'categoria-tematica';
   };
@@ -536,7 +536,7 @@ export interface ApiCategoriaTematicaCategoriaTematica
 export interface ApiDestacadoDestacado extends Struct.CollectionTypeSchema {
   collectionName: 'destacados';
   info: {
-    displayName: 'destacado';
+    displayName: 'Destacados';
     pluralName: 'destacados';
     singularName: 'destacado';
   };
@@ -565,7 +565,8 @@ export interface ApiDestacadoDestacado extends Struct.CollectionTypeSchema {
       Schema.Attribute.Unique &
       Schema.Attribute.SetMinMax<
         {
-          max: 6;
+          max: 4;
+          min: 1;
         },
         number
       >;
@@ -580,7 +581,7 @@ export interface ApiDestacadoDestacado extends Struct.CollectionTypeSchema {
 export interface ApiManualManual extends Struct.CollectionTypeSchema {
   collectionName: 'manuals';
   info: {
-    displayName: 'manual';
+    displayName: 'Manuales';
     pluralName: 'manuals';
     singularName: 'manual';
   };
@@ -658,7 +659,7 @@ export interface ApiManualManual extends Struct.CollectionTypeSchema {
 export interface ApiMarcaMarca extends Struct.CollectionTypeSchema {
   collectionName: 'marcas';
   info: {
-    displayName: 'marca';
+    displayName: 'Operadores';
     pluralName: 'marcas';
     singularName: 'marca';
   };
@@ -724,7 +725,7 @@ export interface ApiMarcaMarca extends Struct.CollectionTypeSchema {
 export interface ApiModeloModelo extends Struct.CollectionTypeSchema {
   collectionName: 'modelos';
   info: {
-    displayName: 'modelo';
+    displayName: 'Hardware';
     pluralName: 'modelos';
     singularName: 'modelo';
   };

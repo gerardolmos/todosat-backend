@@ -4,7 +4,7 @@
   "info": {
     "singularName": "destacado",
     "pluralName": "destacados",
-    "displayName": "destacado"
+    "displayName": "Destacados"
   },
   "options": {
     "draftAndPublish": true
@@ -30,7 +30,8 @@
       "type": "integer",
       "required": true,
       "unique": true,
-      "max": 6
+      "min": 1,
+      "max": 4
     },
     "activa": {
       "type": "boolean",
