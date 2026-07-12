@@ -34,7 +34,8 @@
       "type": "string",
       "minLength": 1,
       "maxLength": 80,
-      "required": true
+      "required": true,
+      "private": true
     },
     "tipo_producto": {
       "type": "enumeration",

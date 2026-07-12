@@ -985,6 +985,7 @@ export interface ApiProductoTiendaProductoTienda
     publishedAt: Schema.Attribute.DateTime;
     referencia_proveedor: Schema.Attribute.String &
       Schema.Attribute.Required &
+      Schema.Attribute.Private &
       Schema.Attribute.SetMinMaxLength<{
         maxLength: 80;
         minLength: 1;
