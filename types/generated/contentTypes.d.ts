@@ -483,6 +483,60 @@ export interface ApiCategoriaNoticiaCategoriaNoticia
   };
 }
 
+export interface ApiCategoriaProductoTiendaCategoriaProductoTienda
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'categorias_productos_tienda';
+  info: {
+    displayName: 'Categor\u00EDas de productos de tienda';
+    pluralName: 'categorias-productos-tienda';
+    singularName: 'categoria-producto-tienda';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    activa: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    descripcion: Schema.Attribute.Text &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 300;
+      }>;
+    imagen: Schema.Attribute.Media<'images'>;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::categoria-producto-tienda.categoria-producto-tienda'
+    > &
+      Schema.Attribute.Private;
+    nombre: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.Unique &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 80;
+        minLength: 2;
+      }>;
+    orden: Schema.Attribute.Integer &
+      Schema.Attribute.SetMinMax<
+        {
+          min: 0;
+        },
+        number
+      > &
+      Schema.Attribute.DefaultTo<0>;
+    productos_tienda: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::producto-tienda.producto-tienda'
+    >;
+    publishedAt: Schema.Attribute.DateTime;
+    slug: Schema.Attribute.UID<'nombre'> & Schema.Attribute.Required;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiDestacadoDestacado extends Struct.CollectionTypeSchema {
   collectionName: 'destacados';
   info: {
@@ -589,6 +643,10 @@ export interface ApiHardwareHardware extends Struct.CollectionTypeSchema {
         },
         number
       >;
+    productos_tienda: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::producto-tienda.producto-tienda'
+    >;
     publishedAt: Schema.Attribute.DateTime;
     slug: Schema.Attribute.UID<'nombre'> & Schema.Attribute.Required;
     tipo_hardware: Schema.Attribute.Enumeration<
@@ -830,6 +888,123 @@ export interface ApiOperadorOperador extends Struct.CollectionTypeSchema {
     velocidad: Schema.Attribute.String;
     velocidad_descripcion: Schema.Attribute.String;
     web_oficial: Schema.Attribute.String;
+  };
+}
+
+export interface ApiProductoTiendaProductoTienda
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'productos_tienda';
+  info: {
+    displayName: 'Productos de tienda';
+    pluralName: 'productos-tienda';
+    singularName: 'producto-tienda';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    accesorios_compatibles: Schema.Attribute.Relation<
+      'manyToMany',
+      'api::producto-tienda.producto-tienda'
+    >;
+    activo: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
+    caracteristicas: Schema.Attribute.Component<
+      'tienda.caracteristica-producto',
+      true
+    >;
+    categoria_producto_tienda: Schema.Attribute.Relation<
+      'manyToOne',
+      'api::categoria-producto-tienda.categoria-producto-tienda'
+    > &
+      Schema.Attribute.Required;
+    compatible_con: Schema.Attribute.Relation<
+      'manyToMany',
+      'api::producto-tienda.producto-tienda'
+    >;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    descripcion_completa: Schema.Attribute.Blocks;
+    descripcion_corta: Schema.Attribute.Text &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 300;
+        minLength: 20;
+      }>;
+    destacado: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
+    estado_venta: Schema.Attribute.Enumeration<
+      [
+        'Disponible',
+        'Bajo consulta',
+        'Agotado',
+        'Pr\u00F3ximamente',
+        'Descatalogado',
+      ]
+    > &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'Disponible'>;
+    galeria: Schema.Attribute.Media<'images', true>;
+    hardware: Schema.Attribute.Relation<'manyToOne', 'api::hardware.hardware'>;
+    imagen_principal: Schema.Attribute.Media<'images'>;
+    incluye: Schema.Attribute.Blocks;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::producto-tienda.producto-tienda'
+    > &
+      Schema.Attribute.Private;
+    moneda: Schema.Attribute.Enumeration<['EUR']> &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'EUR'>;
+    nombre: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.Unique &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 150;
+        minLength: 2;
+      }>;
+    observaciones_envio: Schema.Attribute.Text &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 500;
+      }>;
+    orden: Schema.Attribute.Integer &
+      Schema.Attribute.SetMinMax<
+        {
+          min: 0;
+        },
+        number
+      > &
+      Schema.Attribute.DefaultTo<0>;
+    precio_centimos: Schema.Attribute.Integer &
+      Schema.Attribute.SetMinMax<
+        {
+          min: 0;
+        },
+        number
+      >;
+    publishedAt: Schema.Attribute.DateTime;
+    referencia_proveedor: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 80;
+        minLength: 1;
+      }>;
+    requiere_envio: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
+    sku: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.Unique &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 80;
+        minLength: 1;
+      }>;
+    slug: Schema.Attribute.UID<'nombre'> & Schema.Attribute.Required;
+    tipo_producto: Schema.Attribute.Enumeration<
+      ['Producto principal', 'Accesorio']
+    > &
+      Schema.Attribute.Required;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
   };
 }
 
@@ -1345,11 +1520,13 @@ declare module '@strapi/strapi' {
       'admin::transfer-token-permission': AdminTransferTokenPermission;
       'admin::user': AdminUser;
       'api::categoria-noticia.categoria-noticia': ApiCategoriaNoticiaCategoriaNoticia;
+      'api::categoria-producto-tienda.categoria-producto-tienda': ApiCategoriaProductoTiendaCategoriaProductoTienda;
       'api::destacado.destacado': ApiDestacadoDestacado;
       'api::hardware.hardware': ApiHardwareHardware;
       'api::manual.manual': ApiManualManual;
       'api::noticia.noticia': ApiNoticiaNoticia;
       'api::operador.operador': ApiOperadorOperador;
+      'api::producto-tienda.producto-tienda': ApiProductoTiendaProductoTienda;
       'plugin::content-releases.release': PluginContentReleasesRelease;
       'plugin::content-releases.release-action': PluginContentReleasesReleaseAction;
       'plugin::i18n.locale': PluginI18NLocale;

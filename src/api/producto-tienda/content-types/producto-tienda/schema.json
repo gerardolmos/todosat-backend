@@ -1,0 +1,149 @@
+{
+  "kind": "collectionType",
+  "collectionName": "productos_tienda",
+  "info": {
+    "singularName": "producto-tienda",
+    "pluralName": "productos-tienda",
+    "displayName": "Productos de tienda"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "nombre": {
+      "type": "string",
+      "minLength": 2,
+      "maxLength": 150,
+      "required": true,
+      "unique": true
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "nombre",
+      "required": true
+    },
+    "sku": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 80,
+      "required": true,
+      "unique": true
+    },
+    "referencia_proveedor": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 80,
+      "required": true
+    },
+    "tipo_producto": {
+      "type": "enumeration",
+      "required": true,
+      "enum": [
+        "Producto principal",
+        "Accesorio"
+      ]
+    },
+    "precio_centimos": {
+      "type": "integer",
+      "min": 0
+    },
+    "moneda": {
+      "type": "enumeration",
+      "required": true,
+      "default": "EUR",
+      "enum": [
+        "EUR"
+      ]
+    },
+    "estado_venta": {
+      "type": "enumeration",
+      "required": true,
+      "default": "Disponible",
+      "enum": [
+        "Disponible",
+        "Bajo consulta",
+        "Agotado",
+        "Próximamente",
+        "Descatalogado"
+      ]
+    },
+    "activo": {
+      "type": "boolean",
+      "default": true
+    },
+    "destacado": {
+      "type": "boolean",
+      "default": false
+    },
+    "orden": {
+      "type": "integer",
+      "min": 0,
+      "default": 0
+    },
+    "requiere_envio": {
+      "type": "boolean",
+      "default": true
+    },
+    "descripcion_corta": {
+      "type": "text",
+      "minLength": 20,
+      "maxLength": 300,
+      "required": true
+    },
+    "descripcion_completa": {
+      "type": "blocks"
+    },
+    "imagen_principal": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "galeria": {
+      "type": "media",
+      "multiple": true,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "caracteristicas": {
+      "type": "component",
+      "repeatable": true,
+      "component": "tienda.caracteristica-producto"
+    },
+    "incluye": {
+      "type": "blocks"
+    },
+    "observaciones_envio": {
+      "type": "text",
+      "maxLength": 500
+    },
+    "categoria_producto_tienda": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::categoria-producto-tienda.categoria-producto-tienda",
+      "inversedBy": "productos_tienda",
+      "required": true
+    },
+    "hardware": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::hardware.hardware",
+      "inversedBy": "productos_tienda"
+    },
+    "compatible_con": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::producto-tienda.producto-tienda",
+      "inversedBy": "accesorios_compatibles"
+    },
+    "accesorios_compatibles": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::producto-tienda.producto-tienda",
+      "mappedBy": "compatible_con"
+    }
+  }
+}

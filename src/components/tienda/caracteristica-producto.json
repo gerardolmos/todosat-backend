@@ -1,0 +1,22 @@
+{
+  "collectionName": "components_tienda_caracteristicas_producto",
+  "info": {
+    "displayName": "Característica de producto de tienda",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "etiqueta": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 80,
+      "required": true
+    },
+    "valor": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 160,
+      "required": true
+    }
+  }
+}
