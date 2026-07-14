@@ -582,6 +582,83 @@ export interface ApiDestacadoDestacado extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiEventoStripeTiendaEventoStripeTienda
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'eventos_stripe_tienda';
+  info: {
+    description: 'Registro m\u00EDnimo para procesar webhooks de forma idempotente';
+    displayName: 'Eventos de Stripe de tienda';
+    pluralName: 'eventos-stripe-tienda';
+    singularName: 'evento-stripe-tienda';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  pluginOptions: {
+    'content-manager': {
+      visible: false;
+    };
+    'content-type-builder': {
+      visible: false;
+    };
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    error: Schema.Attribute.Text & Schema.Attribute.Private;
+    intentos: Schema.Attribute.Integer &
+      Schema.Attribute.Required &
+      Schema.Attribute.Private &
+      Schema.Attribute.SetMinMax<
+        {
+          min: 0;
+        },
+        number
+      > &
+      Schema.Attribute.DefaultTo<0>;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::evento-stripe-tienda.evento-stripe-tienda'
+    > &
+      Schema.Attribute.Private;
+    modo_live: Schema.Attribute.Boolean &
+      Schema.Attribute.Required &
+      Schema.Attribute.Private &
+      Schema.Attribute.DefaultTo<false>;
+    pedido_tienda: Schema.Attribute.Relation<
+      'manyToOne',
+      'api::pedido-tienda.pedido-tienda'
+    >;
+    procesado: Schema.Attribute.Boolean &
+      Schema.Attribute.Required &
+      Schema.Attribute.Private &
+      Schema.Attribute.DefaultTo<false>;
+    procesado_en: Schema.Attribute.DateTime & Schema.Attribute.Private;
+    publishedAt: Schema.Attribute.DateTime;
+    recibido_en: Schema.Attribute.DateTime &
+      Schema.Attribute.Required &
+      Schema.Attribute.Private;
+    stripe_event_id: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.Private &
+      Schema.Attribute.Unique &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 255;
+      }>;
+    tipo_evento: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.Private &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 160;
+      }>;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiHardwareHardware extends Struct.CollectionTypeSchema {
   collectionName: 'hardwares';
   info: {
@@ -684,6 +761,136 @@ export interface ApiHardwareHardware extends Struct.CollectionTypeSchema {
         },
         number
       >;
+  };
+}
+
+export interface ApiLineaPedidoTiendaLineaPedidoTienda
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'lineas_pedido_tienda';
+  info: {
+    description: 'Copia hist\u00F3rica e inmutable de los productos comprados';
+    displayName: 'L\u00EDneas de pedido de tienda';
+    pluralName: 'lineas-pedido-tienda';
+    singularName: 'linea-pedido-tienda';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  pluginOptions: {
+    'content-manager': {
+      visible: false;
+    };
+    'content-type-builder': {
+      visible: false;
+    };
+  };
+  attributes: {
+    cantidad: Schema.Attribute.Integer &
+      Schema.Attribute.Required &
+      Schema.Attribute.Private &
+      Schema.Attribute.SetMinMax<
+        {
+          max: 20;
+          min: 1;
+        },
+        number
+      >;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    impuestos_centimos: Schema.Attribute.Integer &
+      Schema.Attribute.Required &
+      Schema.Attribute.Private &
+      Schema.Attribute.SetMinMax<
+        {
+          min: 0;
+        },
+        number
+      > &
+      Schema.Attribute.DefaultTo<0>;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::linea-pedido-tienda.linea-pedido-tienda'
+    > &
+      Schema.Attribute.Private;
+    moneda: Schema.Attribute.Enumeration<['EUR']> &
+      Schema.Attribute.Required &
+      Schema.Attribute.Private &
+      Schema.Attribute.DefaultTo<'EUR'>;
+    nombre_producto: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.Private &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 180;
+      }>;
+    pedido_tienda: Schema.Attribute.Relation<
+      'manyToOne',
+      'api::pedido-tienda.pedido-tienda'
+    > &
+      Schema.Attribute.Required;
+    precio_unitario_centimos: Schema.Attribute.Integer &
+      Schema.Attribute.Required &
+      Schema.Attribute.Private &
+      Schema.Attribute.SetMinMax<
+        {
+          min: 0;
+        },
+        number
+      >;
+    producto_document_id: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.Private &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 255;
+      }>;
+    producto_tienda: Schema.Attribute.Relation<
+      'manyToOne',
+      'api::producto-tienda.producto-tienda'
+    >;
+    publishedAt: Schema.Attribute.DateTime;
+    referencia_proveedor: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.Private &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 160;
+      }>;
+    requiere_envio: Schema.Attribute.Boolean &
+      Schema.Attribute.Required &
+      Schema.Attribute.Private &
+      Schema.Attribute.DefaultTo<true>;
+    sku: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.Private &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 100;
+      }>;
+    subtotal_centimos: Schema.Attribute.Integer &
+      Schema.Attribute.Required &
+      Schema.Attribute.Private &
+      Schema.Attribute.SetMinMax<
+        {
+          min: 0;
+        },
+        number
+      >;
+    tipo_producto: Schema.Attribute.Enumeration<
+      ['Producto principal', 'Accesorio']
+    > &
+      Schema.Attribute.Required &
+      Schema.Attribute.Private;
+    total_centimos: Schema.Attribute.Integer &
+      Schema.Attribute.Required &
+      Schema.Attribute.Private &
+      Schema.Attribute.SetMinMax<
+        {
+          min: 0;
+        },
+        number
+      >;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
   };
 }
 
@@ -888,6 +1095,170 @@ export interface ApiOperadorOperador extends Struct.CollectionTypeSchema {
     velocidad: Schema.Attribute.String;
     velocidad_descripcion: Schema.Attribute.String;
     web_oficial: Schema.Attribute.String;
+  };
+}
+
+export interface ApiPedidoTiendaPedidoTienda
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'pedidos_tienda';
+  info: {
+    description: 'Pedidos internos y privados de TodoSatcom';
+    displayName: 'Pedidos de tienda';
+    pluralName: 'pedidos-tienda';
+    singularName: 'pedido-tienda';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  pluginOptions: {
+    'content-manager': {
+      visible: false;
+    };
+    'content-type-builder': {
+      visible: false;
+    };
+  };
+  attributes: {
+    aceptacion_condiciones_en: Schema.Attribute.DateTime &
+      Schema.Attribute.Private;
+    caduca_en: Schema.Attribute.DateTime &
+      Schema.Attribute.Required &
+      Schema.Attribute.Private;
+    clave_idempotencia: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.Private &
+      Schema.Attribute.Unique &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 120;
+      }>;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    direccion_envio: Schema.Attribute.Component<
+      'tienda.direccion-envio',
+      false
+    > &
+      Schema.Attribute.Private;
+    email_cliente: Schema.Attribute.Email & Schema.Attribute.Private;
+    envio_centimos: Schema.Attribute.Integer &
+      Schema.Attribute.Required &
+      Schema.Attribute.Private &
+      Schema.Attribute.SetMinMax<
+        {
+          min: 0;
+        },
+        number
+      > &
+      Schema.Attribute.DefaultTo<0>;
+    estado: Schema.Attribute.Enumeration<
+      [
+        'Pendiente de pago',
+        'Pagado',
+        'Pago fallido',
+        'Cancelado',
+        'En preparaci\u00F3n',
+        'Enviado',
+        'Entregado',
+        'Reembolsado',
+        'Reembolso parcial',
+      ]
+    > &
+      Schema.Attribute.Required &
+      Schema.Attribute.Private &
+      Schema.Attribute.DefaultTo<'Pendiente de pago'>;
+    eventos_stripe_tienda: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::evento-stripe-tienda.evento-stripe-tienda'
+    >;
+    fecha_envio: Schema.Attribute.DateTime & Schema.Attribute.Private;
+    fecha_pago: Schema.Attribute.DateTime & Schema.Attribute.Private;
+    impuestos_centimos: Schema.Attribute.Integer &
+      Schema.Attribute.Required &
+      Schema.Attribute.Private &
+      Schema.Attribute.SetMinMax<
+        {
+          min: 0;
+        },
+        number
+      > &
+      Schema.Attribute.DefaultTo<0>;
+    lineas_pedido_tienda: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::linea-pedido-tienda.linea-pedido-tienda'
+    >;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::pedido-tienda.pedido-tienda'
+    > &
+      Schema.Attribute.Private;
+    moneda: Schema.Attribute.Enumeration<['EUR']> &
+      Schema.Attribute.Required &
+      Schema.Attribute.Private &
+      Schema.Attribute.DefaultTo<'EUR'>;
+    nombre_cliente: Schema.Attribute.String &
+      Schema.Attribute.Private &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 120;
+      }>;
+    notas_internas: Schema.Attribute.Text & Schema.Attribute.Private;
+    numero_pedido: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.Private &
+      Schema.Attribute.Unique &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 40;
+        minLength: 8;
+      }>;
+    publishedAt: Schema.Attribute.DateTime;
+    referencia_envio: Schema.Attribute.String &
+      Schema.Attribute.Private &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 160;
+      }>;
+    stripe_checkout_session_id: Schema.Attribute.String &
+      Schema.Attribute.Private &
+      Schema.Attribute.Unique &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 255;
+      }>;
+    stripe_payment_intent_id: Schema.Attribute.String &
+      Schema.Attribute.Private &
+      Schema.Attribute.Unique &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 255;
+      }>;
+    subtotal_centimos: Schema.Attribute.Integer &
+      Schema.Attribute.Required &
+      Schema.Attribute.Private &
+      Schema.Attribute.SetMinMax<
+        {
+          min: 0;
+        },
+        number
+      >;
+    telefono_cliente: Schema.Attribute.String &
+      Schema.Attribute.Private &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 40;
+      }>;
+    total_centimos: Schema.Attribute.Integer &
+      Schema.Attribute.Required &
+      Schema.Attribute.Private &
+      Schema.Attribute.SetMinMax<
+        {
+          min: 0;
+        },
+        number
+      >;
+    transportista: Schema.Attribute.String &
+      Schema.Attribute.Private &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 100;
+      }>;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
   };
 }
 
@@ -1523,10 +1894,13 @@ declare module '@strapi/strapi' {
       'api::categoria-noticia.categoria-noticia': ApiCategoriaNoticiaCategoriaNoticia;
       'api::categoria-producto-tienda.categoria-producto-tienda': ApiCategoriaProductoTiendaCategoriaProductoTienda;
       'api::destacado.destacado': ApiDestacadoDestacado;
+      'api::evento-stripe-tienda.evento-stripe-tienda': ApiEventoStripeTiendaEventoStripeTienda;
       'api::hardware.hardware': ApiHardwareHardware;
+      'api::linea-pedido-tienda.linea-pedido-tienda': ApiLineaPedidoTiendaLineaPedidoTienda;
       'api::manual.manual': ApiManualManual;
       'api::noticia.noticia': ApiNoticiaNoticia;
       'api::operador.operador': ApiOperadorOperador;
+      'api::pedido-tienda.pedido-tienda': ApiPedidoTiendaPedidoTienda;
       'api::producto-tienda.producto-tienda': ApiProductoTiendaProductoTienda;
       'plugin::content-releases.release': PluginContentReleasesRelease;
       'plugin::content-releases.release-action': PluginContentReleasesReleaseAction;
