@@ -1,0 +1,52 @@
+{
+  "collectionName": "components_tienda_direcciones_envio",
+  "info": {
+    "displayName": "Dirección de envío",
+    "description": "Datos mínimos necesarios para entregar un pedido"
+  },
+  "options": {},
+  "attributes": {
+    "nombre_destinatario": {
+      "type": "string",
+      "required": true,
+      "maxLength": 120,
+      "private": true
+    },
+    "linea_1": {
+      "type": "string",
+      "required": true,
+      "maxLength": 180,
+      "private": true
+    },
+    "linea_2": {
+      "type": "string",
+      "maxLength": 180,
+      "private": true
+    },
+    "codigo_postal": {
+      "type": "string",
+      "required": true,
+      "maxLength": 20,
+      "private": true
+    },
+    "ciudad": {
+      "type": "string",
+      "required": true,
+      "maxLength": 100,
+      "private": true
+    },
+    "provincia": {
+      "type": "string",
+      "maxLength": 100,
+      "private": true
+    },
+    "codigo_pais": {
+      "type": "string",
+      "required": true,
+      "minLength": 2,
+      "maxLength": 2,
+      "default": "ES",
+      "private": true
+    }
+  }
+}

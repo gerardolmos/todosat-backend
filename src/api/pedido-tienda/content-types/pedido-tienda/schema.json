@@ -1,0 +1,165 @@
+{
+  "kind": "collectionType",
+  "collectionName": "pedidos_tienda",
+  "info": {
+    "singularName": "pedido-tienda",
+    "pluralName": "pedidos-tienda",
+    "displayName": "Pedidos de tienda",
+    "description": "Pedidos internos y privados de TodoSatcom"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {
+    "content-manager": {
+      "visible": false
+    },
+    "content-type-builder": {
+      "visible": false
+    }
+  },
+  "attributes": {
+    "numero_pedido": {
+      "type": "string",
+      "required": true,
+      "unique": true,
+      "minLength": 8,
+      "maxLength": 40,
+      "private": true
+    },
+    "clave_idempotencia": {
+      "type": "string",
+      "required": true,
+      "unique": true,
+      "maxLength": 120,
+      "private": true
+    },
+    "estado": {
+      "type": "enumeration",
+      "enum": [
+        "Pendiente de pago",
+        "Pagado",
+        "Pago fallido",
+        "Cancelado",
+        "En preparación",
+        "Enviado",
+        "Entregado",
+        "Reembolsado",
+        "Reembolso parcial"
+      ],
+      "required": true,
+      "default": "Pendiente de pago",
+      "private": true
+    },
+    "moneda": {
+      "type": "enumeration",
+      "enum": [
+        "EUR"
+      ],
+      "required": true,
+      "default": "EUR",
+      "private": true
+    },
+    "subtotal_centimos": {
+      "type": "integer",
+      "required": true,
+      "min": 0,
+      "private": true
+    },
+    "impuestos_centimos": {
+      "type": "integer",
+      "required": true,
+      "min": 0,
+      "default": 0,
+      "private": true
+    },
+    "envio_centimos": {
+      "type": "integer",
+      "required": true,
+      "min": 0,
+      "default": 0,
+      "private": true
+    },
+    "total_centimos": {
+      "type": "integer",
+      "required": true,
+      "min": 0,
+      "private": true
+    },
+    "email_cliente": {
+      "type": "email",
+      "private": true
+    },
+    "nombre_cliente": {
+      "type": "string",
+      "maxLength": 120,
+      "private": true
+    },
+    "telefono_cliente": {
+      "type": "string",
+      "maxLength": 40,
+      "private": true
+    },
+    "direccion_envio": {
+      "type": "component",
+      "repeatable": false,
+      "component": "tienda.direccion-envio",
+      "private": true
+    },
+    "stripe_checkout_session_id": {
+      "type": "string",
+      "unique": true,
+      "maxLength": 255,
+      "private": true
+    },
+    "stripe_payment_intent_id": {
+      "type": "string",
+      "unique": true,
+      "maxLength": 255,
+      "private": true
+    },
+    "fecha_pago": {
+      "type": "datetime",
+      "private": true
+    },
+    "caduca_en": {
+      "type": "datetime",
+      "required": true,
+      "private": true
+    },
+    "aceptacion_condiciones_en": {
+      "type": "datetime",
+      "private": true
+    },
+    "transportista": {
+      "type": "string",
+      "maxLength": 100,
+      "private": true
+    },
+    "referencia_envio": {
+      "type": "string",
+      "maxLength": 160,
+      "private": true
+    },
+    "fecha_envio": {
+      "type": "datetime",
+      "private": true
+    },
+    "notas_internas": {
+      "type": "text",
+      "private": true
+    },
+    "lineas_pedido_tienda": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::linea-pedido-tienda.linea-pedido-tienda",
+      "mappedBy": "pedido_tienda"
+    },
+    "eventos_stripe_tienda": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::evento-stripe-tienda.evento-stripe-tienda",
+      "mappedBy": "pedido_tienda"
+    }
+  }
+}

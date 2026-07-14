@@ -1,0 +1,74 @@
+{
+  "kind": "collectionType",
+  "collectionName": "eventos_stripe_tienda",
+  "info": {
+    "singularName": "evento-stripe-tienda",
+    "pluralName": "eventos-stripe-tienda",
+    "displayName": "Eventos de Stripe de tienda",
+    "description": "Registro mínimo para procesar webhooks de forma idempotente"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {
+    "content-manager": {
+      "visible": false
+    },
+    "content-type-builder": {
+      "visible": false
+    }
+  },
+  "attributes": {
+    "stripe_event_id": {
+      "type": "string",
+      "required": true,
+      "unique": true,
+      "maxLength": 255,
+      "private": true
+    },
+    "tipo_evento": {
+      "type": "string",
+      "required": true,
+      "maxLength": 160,
+      "private": true
+    },
+    "modo_live": {
+      "type": "boolean",
+      "required": true,
+      "default": false,
+      "private": true
+    },
+    "procesado": {
+      "type": "boolean",
+      "required": true,
+      "default": false,
+      "private": true
+    },
+    "recibido_en": {
+      "type": "datetime",
+      "required": true,
+      "private": true
+    },
+    "procesado_en": {
+      "type": "datetime",
+      "private": true
+    },
+    "intentos": {
+      "type": "integer",
+      "required": true,
+      "min": 0,
+      "default": 0,
+      "private": true
+    },
+    "error": {
+      "type": "text",
+      "private": true
+    },
+    "pedido_tienda": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::pedido-tienda.pedido-tienda",
+      "inversedBy": "eventos_stripe_tienda"
+    }
+  }
+}
