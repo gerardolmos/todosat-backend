@@ -4,6 +4,11 @@ import {
 } from "node:crypto";
 
 import { factories } from "@strapi/strapi";
+import type Stripe from "stripe";
+
+import {
+  crearSesionCheckoutStripeInterna,
+} from "./checkout-stripe";
 
 const PRODUCTO_TIENDA_UID =
   "api::producto-tienda.producto-tienda" as const;
@@ -16,7 +21,7 @@ const LINEA_PEDIDO_TIENDA_UID =
 
 const MIN_IDEMPOTENCY_KEY_LENGTH = 20;
 const MAX_IDEMPOTENCY_KEY_LENGTH = 120;
-const DEFAULT_ORDER_EXPIRY_MINUTES = 30;
+const DEFAULT_ORDER_EXPIRY_MINUTES = 60;
 const MAX_ORDER_EXPIRY_MINUTES = 1440;
 
 const MAX_LINEAS_PEDIDO = 20;
@@ -799,5 +804,16 @@ export default factories.createCoreService(
         throw error;
       }
     },
+    async crearSesionCheckoutStripeSegura(
+      pedidoDocumentId: unknown,
+      stripeClient?: Stripe,
+    ) {
+      return crearSesionCheckoutStripeInterna({
+        strapi,
+        pedidoDocumentId,
+        stripeClient,
+      });
+    },
+
   }),
 );
