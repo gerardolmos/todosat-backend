@@ -1173,6 +1173,12 @@ export interface ApiPedidoTiendaPedidoTienda
     >;
     fecha_envio: Schema.Attribute.DateTime & Schema.Attribute.Private;
     fecha_pago: Schema.Attribute.DateTime & Schema.Attribute.Private;
+    huella_carrito: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.Private &
+      Schema.Attribute.SetMinMaxLength<{
+        maxLength: 64;
+      }>;
     impuestos_centimos: Schema.Attribute.Integer &
       Schema.Attribute.Required &
       Schema.Attribute.Private &

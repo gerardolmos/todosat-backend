@@ -1,7 +1,23 @@
+import {
+  createHash,
+  randomBytes,
+} from "node:crypto";
+
 import { factories } from "@strapi/strapi";
 
 const PRODUCTO_TIENDA_UID =
   "api::producto-tienda.producto-tienda" as const;
+
+const PEDIDO_TIENDA_UID =
+  "api::pedido-tienda.pedido-tienda" as const;
+
+const LINEA_PEDIDO_TIENDA_UID =
+  "api::linea-pedido-tienda.linea-pedido-tienda" as const;
+
+const MIN_IDEMPOTENCY_KEY_LENGTH = 20;
+const MAX_IDEMPOTENCY_KEY_LENGTH = 120;
+const DEFAULT_ORDER_EXPIRY_MINUTES = 30;
+const MAX_ORDER_EXPIRY_MINUTES = 1440;
 
 const MAX_LINEAS_PEDIDO = 20;
 const MAX_CANTIDAD_POR_LINEA = 20;
@@ -61,6 +77,42 @@ export interface CarritoValidado {
   requiereEnvio: boolean;
 }
 
+interface PedidoTiendaInterno {
+  documentId: string;
+  numero_pedido: string;
+  clave_idempotencia: string;
+  huella_carrito: string;
+  estado: string;
+  moneda: MonedaTienda;
+  subtotal_centimos: number;
+  impuestos_centimos: number;
+  envio_centimos: number;
+  total_centimos: number;
+  caduca_en: string;
+}
+
+interface PedidoTiendaServiceInterno {
+  reconstruirCarritoSeguro(
+    rawItems: unknown,
+  ): Promise<CarritoValidado>;
+}
+
+export interface PedidoProvisionalSeguro {
+  pedidoDocumentId: string;
+  numeroPedido: string;
+  estado: string;
+  moneda: MonedaTienda;
+  subtotalCentimos: number;
+  impuestosCentimos: number;
+  envioCentimos: number;
+  totalCentimos: number;
+  caducaEn: string;
+  cantidadLineas: number;
+  cantidadTotal: number;
+  requiereEnvio: boolean;
+  reutilizado: boolean;
+}
+
 export class CheckoutValidationError extends Error {
   readonly code: string;
   readonly status: number;
@@ -85,6 +137,139 @@ function isRecord(
     value !== null &&
     !Array.isArray(value)
   );
+}
+
+function normalizeIdempotencyKey(
+  rawKey: unknown,
+): string {
+  if (typeof rawKey !== "string") {
+    throw new CheckoutValidationError(
+      "IDEMPOTENCY_KEY_INVALID",
+      "La clave de idempotencia no es válida.",
+    );
+  }
+
+  const key = rawKey.trim();
+
+  if (
+    key.length < MIN_IDEMPOTENCY_KEY_LENGTH ||
+    key.length > MAX_IDEMPOTENCY_KEY_LENGTH ||
+    !/^[A-Za-z0-9:_-]+$/.test(key)
+  ) {
+    throw new CheckoutValidationError(
+      "IDEMPOTENCY_KEY_INVALID",
+      "La clave de idempotencia no es válida.",
+    );
+  }
+
+  return key;
+}
+
+function createCartFingerprint(
+  items: ItemCarritoEntrada[],
+): string {
+  const canonicalCart = items
+    .map(
+      (item) =>
+        `${item.documentId}:${item.cantidad}`,
+    )
+    .join("|");
+
+  return createHash("sha256")
+    .update(canonicalCart, "utf8")
+    .digest("hex");
+}
+
+function createOrderNumber(): string {
+  const now = new Date();
+
+  const datePart = [
+    now.getUTCFullYear(),
+    String(
+      now.getUTCMonth() + 1,
+    ).padStart(2, "0"),
+    String(
+      now.getUTCDate(),
+    ).padStart(2, "0"),
+  ].join("");
+
+  const timePart = [
+    String(
+      now.getUTCHours(),
+    ).padStart(2, "0"),
+    String(
+      now.getUTCMinutes(),
+    ).padStart(2, "0"),
+    String(
+      now.getUTCSeconds(),
+    ).padStart(2, "0"),
+  ].join("");
+
+  const randomPart = randomBytes(4)
+    .toString("hex")
+    .toUpperCase();
+
+  return `TS-${datePart}-${timePart}-${randomPart}`;
+}
+
+function getOrderExpiryMinutes(): number {
+  const configuredValue = Number(
+    process.env
+      .CHECKOUT_ORDER_EXPIRY_MINUTES,
+  );
+
+  if (
+    Number.isSafeInteger(configuredValue) &&
+    configuredValue >= 30 &&
+    configuredValue <=
+      MAX_ORDER_EXPIRY_MINUTES
+  ) {
+    return configuredValue;
+  }
+
+  return DEFAULT_ORDER_EXPIRY_MINUTES;
+}
+
+function createOrderExpiryDate(): string {
+  const expiryDate = new Date(
+    Date.now() +
+      getOrderExpiryMinutes() *
+        60 *
+        1000,
+  );
+
+  return expiryDate.toISOString();
+}
+
+function createOrderSummary(
+  order: PedidoTiendaInterno,
+  cart: CarritoValidado,
+  reused: boolean,
+): PedidoProvisionalSeguro {
+  return {
+    pedidoDocumentId:
+      order.documentId,
+    numeroPedido:
+      order.numero_pedido,
+    estado: order.estado,
+    moneda: order.moneda,
+    subtotalCentimos:
+      order.subtotal_centimos,
+    impuestosCentimos:
+      order.impuestos_centimos,
+    envioCentimos:
+      order.envio_centimos,
+    totalCentimos:
+      order.total_centimos,
+    caducaEn: order.caduca_en,
+    cantidadLineas:
+      cart.lineas.length,
+    cantidadTotal:
+      cart.cantidadTotal,
+    requiereEnvio:
+      cart.requiereEnvio,
+    reutilizado: reused,
+  };
 }
 
 function getTotalMaximoCentimos() {
@@ -362,6 +547,257 @@ export default factories.createCoreService(
             line.requiereEnvio,
         ),
       };
+    },
+
+    async crearPedidoProvisionalSeguro(
+      rawItems: unknown,
+      rawIdempotencyKey: unknown,
+    ): Promise<PedidoProvisionalSeguro> {
+      const normalizedItems =
+        normalizeCartItems(rawItems);
+
+      const idempotencyKey =
+        normalizeIdempotencyKey(
+          rawIdempotencyKey,
+        );
+
+      const cartFingerprint =
+        createCartFingerprint(
+          normalizedItems,
+        );
+
+      const secureService =
+        strapi.service(
+          PEDIDO_TIENDA_UID,
+        ) as unknown as
+          PedidoTiendaServiceInterno;
+
+      const findExistingOrder =
+        async () =>
+          (await strapi
+            .documents(
+              PEDIDO_TIENDA_UID,
+            )
+            .findFirst({
+              filters: {
+                clave_idempotencia:
+                  idempotencyKey,
+              },
+              fields: [
+                "numero_pedido",
+                "clave_idempotencia",
+                "huella_carrito",
+                "estado",
+                "moneda",
+                "subtotal_centimos",
+                "impuestos_centimos",
+                "envio_centimos",
+                "total_centimos",
+                "caduca_en",
+              ],
+            })) as
+            | PedidoTiendaInterno
+            | null;
+
+      const resolveExistingOrder =
+        async (
+          existingOrder:
+            PedidoTiendaInterno,
+        ) => {
+          if (
+            existingOrder
+              .huella_carrito !==
+            cartFingerprint
+          ) {
+            throw new CheckoutValidationError(
+              "IDEMPOTENCY_KEY_REUSED",
+              "La misma clave de operación se ha utilizado con un carrito diferente.",
+              409,
+            );
+          }
+
+          const cart =
+            await secureService
+              .reconstruirCarritoSeguro(
+                normalizedItems,
+              );
+
+          return createOrderSummary(
+            existingOrder,
+            cart,
+            true,
+          );
+        };
+
+      const existingOrder =
+        await findExistingOrder();
+
+      if (existingOrder) {
+        return resolveExistingOrder(
+          existingOrder,
+        );
+      }
+
+      try {
+        return await strapi.db.transaction(
+          async () => {
+            /*
+             * Repetimos la comprobación dentro
+             * de la transacción para reducir
+             * carreras entre peticiones.
+             */
+            const concurrentOrder =
+              await findExistingOrder();
+
+            if (concurrentOrder) {
+              return resolveExistingOrder(
+                concurrentOrder,
+              );
+            }
+
+            const cart =
+              await secureService
+                .reconstruirCarritoSeguro(
+                  normalizedItems,
+                );
+
+            /*
+             * Impuestos y envío permanecen
+             * expresamente a cero hasta cerrar
+             * las reglas fiscales y logísticas.
+             * Todavía no existe ningún cobro.
+             */
+            const order =
+              (await strapi
+                .documents(
+                  PEDIDO_TIENDA_UID,
+                )
+                .create({
+                  data: {
+                    numero_pedido:
+                      createOrderNumber(),
+                    clave_idempotencia:
+                      idempotencyKey,
+                    huella_carrito:
+                      cartFingerprint,
+                    estado:
+                      "Pendiente de pago",
+                    moneda:
+                      cart.moneda,
+                    subtotal_centimos:
+                      cart
+                        .subtotalProductosCentimos,
+                    impuestos_centimos: 0,
+                    envio_centimos: 0,
+                    total_centimos:
+                      cart
+                        .subtotalProductosCentimos,
+                    caduca_en:
+                      createOrderExpiryDate(),
+                  },
+                })) as PedidoTiendaInterno;
+
+            for (
+              const line of cart.lineas
+            ) {
+              /*
+               * Los documentId se usan para
+               * conectar las relaciones.
+               * El cast compensa una limitación
+               * conocida de los tipos de Strapi.
+               */
+              const lineData = {
+                pedido_tienda:
+                  order.documentId,
+
+                producto_tienda: {
+                  connect: [
+                    {
+                      documentId:
+                        line
+                          .productoDocumentId,
+                      status:
+                        "published",
+                    },
+                  ],
+                },
+
+                producto_document_id:
+                  line
+                    .productoDocumentId,
+
+                sku: line.sku,
+
+                referencia_proveedor:
+                  line
+                    .referenciaProveedor,
+
+                nombre_producto:
+                  line.nombreProducto,
+
+                tipo_producto:
+                  line.tipoProducto,
+
+                cantidad:
+                  line.cantidad,
+
+                precio_unitario_centimos:
+                  line
+                    .precioUnitarioCentimos,
+
+                subtotal_centimos:
+                  line
+                    .subtotalCentimos,
+
+                impuestos_centimos: 0,
+
+                total_centimos:
+                  line
+                    .subtotalCentimos,
+
+                moneda:
+                  line.moneda,
+
+                requiere_envio:
+                  line.requiereEnvio,
+              };
+
+              await strapi
+                .documents(
+                  LINEA_PEDIDO_TIENDA_UID,
+                )
+                .create({
+                  data:
+                    lineData as never,
+                });
+            }
+
+            return createOrderSummary(
+              order,
+              cart,
+              false,
+            );
+          },
+        );
+      } catch (error) {
+        /*
+         * Si dos peticiones simultáneas
+         * compiten por la clave única, una
+         * puede haber creado ya el pedido.
+         */
+        const orderCreatedConcurrently =
+          await findExistingOrder();
+
+        if (
+          orderCreatedConcurrently
+        ) {
+          return resolveExistingOrder(
+            orderCreatedConcurrently,
+          );
+        }
+
+        throw error;
+      }
     },
   }),
 );

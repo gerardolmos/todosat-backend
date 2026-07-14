@@ -34,6 +34,12 @@
       "maxLength": 120,
       "private": true
     },
+    "huella_carrito": {
+      "type": "string",
+      "required": true,
+      "maxLength": 64,
+      "private": true
+    },
     "estado": {
       "type": "enumeration",
       "enum": [
