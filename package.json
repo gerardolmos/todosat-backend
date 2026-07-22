@@ -12,12 +12,13 @@
     "start": "strapi start",
     "strapi": "strapi",
     "upgrade": "npx @strapi/upgrade latest",
-    "upgrade:dry": "npx @strapi/upgrade latest --dry"
+    "upgrade:dry": "npx @strapi/upgrade latest --dry",
+    "test:tienda": "bash scripts/test-tienda.sh"
   },
   "dependencies": {
-    "@strapi/plugin-cloud": "5.50.1",
-    "@strapi/plugin-users-permissions": "5.50.1",
-    "@strapi/strapi": "5.50.1",
+    "@strapi/plugin-cloud": "5.50.2",
+    "@strapi/plugin-users-permissions": "5.50.2",
+    "@strapi/strapi": "5.50.2",
     "better-sqlite3": "12.8.0",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
@@ -40,6 +41,8 @@
     "installId": "5d856d01b8e277cc9e461efff5798e8df228801d03a8669a4b9cf2f43ada3537"
   },
   "overrides": {
-    "ws": "8.21.0"
+    "ws": "8.21.0",
+    "tar": "7.5.19",
+    "sharp": "0.35.3"
   }
 }
