@@ -92,8 +92,8 @@ const config = ({
         keepHeaderOnError: true,
       },
     },
+    'global::security-response-headers',
     'global::block-unused-user-auth',
-    'strapi::poweredBy',
     'strapi::query',
     {
       name: 'strapi::body',
