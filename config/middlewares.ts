@@ -5,6 +5,7 @@ const config: Core.Config.Middlewares = [
   'strapi::errors',
   'strapi::security',
   'strapi::cors',
+  'global::block-unused-user-auth',
   'strapi::poweredBy',
   'strapi::query',
   {
