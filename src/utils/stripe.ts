@@ -1,5 +1,8 @@
 import Stripe from "stripe";
 
+export const STRIPE_API_VERSION =
+  "2026-06-24.dahlia" as const;
+
 export type StripeMode =
   | "test"
   | "live";
@@ -197,8 +200,29 @@ StripeRuntimeConfig {
   };
 }
 
+function assertStripeSdkApiVersion() {
+  const runtimeApiVersion =
+    (
+      Stripe as unknown as {
+        API_VERSION?: unknown;
+      }
+    ).API_VERSION;
+
+  if (
+    runtimeApiVersion !==
+    STRIPE_API_VERSION
+  ) {
+    throw new StripeConfigurationError(
+      "STRIPE_SDK_API_VERSION_MISMATCH",
+      "La versión de API del SDK de Stripe no coincide con la versión aprobada por TodoSatcom.",
+    );
+  }
+}
+
 export function getStripeClient():
 Stripe {
+  assertStripeSdkApiVersion();
+
   const config =
     readRuntimeConfig();
 
@@ -212,6 +236,15 @@ Stripe {
       client: new Stripe(
         config.secretKey,
         {
+          /*
+           * Debe coincidir con la versión
+           * incluida en stripe@22.3.1 y con
+           * la futura versión del endpoint
+           * webhook.
+           */
+          apiVersion:
+            STRIPE_API_VERSION,
+
           appInfo: {
             name: "TodoSatcom",
             version: "0.1.0",
@@ -230,6 +263,10 @@ export function getStripeCheckoutConfig() {
 
   return {
     mode: config.mode,
+
+    apiVersion:
+      STRIPE_API_VERSION,
+
     successUrl:
       config.successUrl,
     cancelUrl:
