@@ -6,6 +6,10 @@ import {
   getStripeClient,
 } from "../../../utils/stripe";
 
+import {
+  getCheckoutCustomerDataParameters,
+} from "./checkout-customer-data";
+
 const PEDIDO_TIENDA_UID =
   "api::pedido-tienda.pedido-tienda" as const;
 
@@ -25,6 +29,7 @@ interface LineaPedidoStripe {
   impuestos_centimos: number;
   total_centimos: number;
   moneda: "EUR";
+  requiere_envio: boolean;
 }
 
 interface PedidoStripeInterno {
@@ -349,6 +354,7 @@ crearSesionCheckoutStripeInterna({
               "impuestos_centimos",
               "total_centimos",
               "moneda",
+              "requiere_envio",
             ],
           },
         },
@@ -433,10 +439,25 @@ crearSesionCheckoutStripeInterna({
       order.numero_pedido,
   };
 
+  const customerDataParameters =
+    getCheckoutCustomerDataParameters({
+      requiresShipping:
+        order.lineas_pedido_tienda!.some(
+          (line) =>
+            line.requiere_envio,
+        ),
+    });
+
   const session =
     await stripe.checkout.sessions.create(
       {
         mode: "payment",
+
+        /*
+         * Con la bandera desactivada este
+         * objeto permanece vacío.
+         */
+        ...customerDataParameters,
 
         client_reference_id:
           order.numero_pedido,
