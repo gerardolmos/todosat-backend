@@ -147,7 +147,9 @@ No se eliminarán automáticamente datos necesarios para gestionar el pedido, el
 
 ## 5. Seaconnect y logística
 
-No existe todavía un contrato técnico implementado con Seaconnect.
+No existe todavía un contrato técnico implementado con Seaconnect para una integración real ni una conexión activa.
+
+Existe únicamente un contrato interno simulado en `docs/tienda/contrato-seaconnect-simulado.md`. No afirma reproducir la API real, no contiene credenciales y no realiza exportaciones.
 
 La integración futura solo podrá ejecutarse para pedidos pagados y deberá definir expresamente:
 
@@ -258,7 +260,7 @@ La copia de datos personales y la activación del checkout permanecen bloqueadas
 4. Probar el webhook exclusivamente con objetos ficticios.
 5. Copiar datos dentro de la transacción de confirmación del pago.
 6. Probar que los estados no pagados no persisten datos.
-7. Crear contrato simulado de Seaconnect.
+7. Obtener la documentación y el contrato reales de Seaconnect y adaptar el formato simulado.
 8. Definir retención y limpieza.
 9. Completar información legal.
 10. Detener el proyecto en la frontera que exige cuenta y credenciales reales de Stripe.
@@ -270,6 +272,10 @@ Mientras este contrato no avance a su siguiente versión:
 - `CHECKOUT_PUBLIC_ENABLED=false`;
 - `CHECKOUT_LIVE_ENABLED=false`;
 - `CHECKOUT_STATUS_PUBLIC_ENABLED=false`;
+- `CHECKOUT_CUSTOMER_DATA_ENABLED=false`;
+- `CHECKOUT_CUSTOMER_DATA_SYNC_ENABLED=false`;
+- `SEACONNECT_EXPORT_ENABLED=false`;
+- `SEACONNECT_LIVE_ENABLED=false`;
 - no se recogerán datos personales;
 - no se copiarán datos desde Stripe;
 - no se enviarán pedidos a Seaconnect;
