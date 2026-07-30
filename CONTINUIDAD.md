@@ -1039,3 +1039,17 @@ La suite de integración exige una única ejecución principal, una única respu
 ## Límite pendiente de activación
 
 Esta protección cubre una instancia de Node/Strapi. Antes de desplegar varias instancias deberá incorporarse una cola persistente o un bloqueo distribuido compatible con la base de datos y la infraestructura definitivas. Esa topología todavía no existe y no debe inventarse.
+
+# 21. ACTUALIZACIÓN — RATE LIMITING, PROXY Y SUPERFICIE PÚBLICA
+
+**Fecha:** 30 de julio de 2026
+
+La auditoría consolidada del backend confirmó que pedidos, líneas de pedido y eventos de Stripe no disponen de permisos públicos. Las rutas comerciales explícitamente públicas continúan protegidas por feature flags, validación del servidor y respuestas mínimas.
+
+Se sustituyeron tres mapas de rate limiting duplicados por una utilidad común con capacidad máxima, limpieza periódica y cabeceras de control.
+
+La confianza en proxy queda desactivada por defecto mediante `TRUST_PROXY=false`. Solo podrá activarse cuando exista un proxy controlado y Strapi no sea accesible directamente.
+
+También se añadió una prueba permanente que confirma dos defensas distintas: los prefijos `/api/auth` y `/api/connect` quedan bloqueados por el middleware, y el rol público no dispone de permisos sobre la colección de usuarios.
+
+El límite distribuido continúa pendiente de la infraestructura real.

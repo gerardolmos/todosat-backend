@@ -1,5 +1,9 @@
 import { factories } from "@strapi/strapi";
 
+import {
+  createLocalRateLimit,
+} from "../../../utils/rate-limit-local";
+
 const PEDIDO_TIENDA_UID =
   "api::pedido-tienda.pedido-tienda" as const;
 
@@ -11,29 +15,8 @@ interface CheckoutRequestBody {
   items?: unknown;
 }
 
-interface RateLimitEntry {
-  count: number;
-  resetAt: number;
-}
 
-const rateLimitEntries =
-  new Map<string, RateLimitEntry>();
 
-function readPositiveInteger(
-  value: string | undefined,
-  fallback: number,
-): number {
-  const parsed = Number(value);
-
-  if (
-    !Number.isSafeInteger(parsed) ||
-    parsed <= 0
-  ) {
-    return fallback;
-  }
-
-  return parsed;
-}
 
 function isCheckoutPublicEnabled(): boolean {
   return (
@@ -74,74 +57,18 @@ function validateLiveModeIsBlocked() {
   }
 }
 
-function applyRateLimit(ctx: {
-  ip?: string;
-  set(
-    name: string,
-    value: string,
-  ): void;
-}): boolean {
-  const now = Date.now();
-
-  const maxRequests =
-    readPositiveInteger(
-      process.env
-        .CHECKOUT_RATE_LIMIT_MAX,
+const applyRateLimit =
+  createLocalRateLimit({
+    name: "checkout",
+    maxRequestsEnv:
+      "CHECKOUT_RATE_LIMIT_MAX",
+    windowMsEnv:
+      "CHECKOUT_RATE_LIMIT_WINDOW_MS",
+    defaultMaxRequests:
       DEFAULT_RATE_LIMIT_MAX,
-    );
-
-  const windowMs =
-    readPositiveInteger(
-      process.env
-        .CHECKOUT_RATE_LIMIT_WINDOW_MS,
+    defaultWindowMs:
       DEFAULT_RATE_LIMIT_WINDOW_MS,
-    );
-
-  const key =
-    typeof ctx.ip === "string" &&
-    ctx.ip.trim()
-      ? ctx.ip.trim()
-      : "unknown";
-
-  const current =
-    rateLimitEntries.get(key);
-
-  if (
-    !current ||
-    current.resetAt <= now
-  ) {
-    rateLimitEntries.set(key, {
-      count: 1,
-      resetAt: now + windowMs,
-    });
-
-    return true;
-  }
-
-  if (
-    current.count >= maxRequests
-  ) {
-    const retryAfterSeconds =
-      Math.max(
-        1,
-        Math.ceil(
-          (current.resetAt - now) /
-            1000,
-        ),
-      );
-
-    ctx.set(
-      "Retry-After",
-      String(retryAfterSeconds),
-    );
-
-    return false;
-  }
-
-  current.count += 1;
-
-  return true;
-}
+  });
 
 function safeErrorCode(
   error: unknown,

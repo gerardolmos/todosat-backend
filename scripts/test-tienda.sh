@@ -15,3 +15,6 @@ STRAPI_CONSOLE
 ./node_modules/.bin/strapi console <<'STRAPI_CONSOLE'
 .load scripts/test-webhook-lifecycle.js
 STRAPI_CONSOLE
+
+echo "Comprobando rate limiting, proxy y rutas de autenticación…"
+node scripts/test-rate-limit-local.cjs
