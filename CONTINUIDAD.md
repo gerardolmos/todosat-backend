@@ -1067,3 +1067,21 @@ La validación del modo `test` o `live` se mantiene centralizada y conserva los 
 * verificar la firma HTTP sigue requiriendo `STRIPE_WEBHOOK_SECRET`.
 
 La suite demuestra que un evento soportado puede procesarse sin clave de API ni URLs de checkout, evitando que una configuración ajena impida registrar un pago ya recibido.
+
+# 23. CIERRE DEL PUNTO DE CONTROL 0
+
+**Fecha:** 30 de julio de 2026
+
+El Punto de Control 0 queda **COMPLETADO PARA EL ENTORNO ACTUAL DE DESARROLLO**.
+
+El cierre consolidado se encuentra en:
+
+`docs/tienda/pc0-cierre.md`
+
+Se han resuelto o documentado los riesgos técnicamente abordables con la información disponible. Los límites restantes dependen de infraestructura distribuida, proveedores, datos empresariales, requisitos legales o credenciales reales y permanecen clasificados como pendientes de activación.
+
+El proyecto continúa con el estado:
+
+**PREPARADO PARA CONTINUAR EL DESARROLLO — NO APTO PARA PRODUCCIÓN.**
+
+La siguiente etapa será el flujo visible previo al checkout y su experiencia de frontend. No se activarán pagos ni conexiones reales.
