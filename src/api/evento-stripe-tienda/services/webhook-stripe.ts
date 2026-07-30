@@ -2,7 +2,7 @@ import type { Core } from "@strapi/strapi";
 import type Stripe from "stripe";
 
 import {
-  getStripeCheckoutConfig,
+  getStripeMode,
 } from "../../../utils/stripe";
 
 const PEDIDO_TIENDA_UID =
@@ -104,8 +104,8 @@ function validateMode(
   event: Stripe.Event,
 ) {
   const expectedLiveMode =
-    getStripeCheckoutConfig().mode ===
-    "live";
+    getStripeMode() ===
+      "live";
 
   if (
     event.livemode !==

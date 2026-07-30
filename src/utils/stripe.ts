@@ -77,6 +77,49 @@ function readStripeMode(): StripeMode {
   return mode;
 }
 
+function assertStripeModeAllowed(
+  mode: StripeMode,
+) {
+  if (mode !== "live") {
+    return;
+  }
+
+  if (
+    process.env.NODE_ENV !==
+    "production"
+  ) {
+    throw new StripeConfigurationError(
+      "STRIPE_LIVE_ENVIRONMENT_FORBIDDEN",
+      "Stripe real solo puede utilizarse en producción.",
+    );
+  }
+
+  const liveEnabled =
+    (
+      process.env
+        .CHECKOUT_LIVE_ENABLED ??
+      ""
+    )
+      .trim()
+      .toLowerCase() === "true";
+
+  if (!liveEnabled) {
+    throw new StripeConfigurationError(
+      "STRIPE_LIVE_DISABLED",
+      "Los pagos reales están bloqueados mediante CHECKOUT_LIVE_ENABLED.",
+    );
+  }
+}
+
+function readValidatedStripeMode():
+StripeMode {
+  const mode = readStripeMode();
+
+  assertStripeModeAllowed(mode);
+
+  return mode;
+}
+
 function readCheckoutUrl(
   variableName: string,
   mode: StripeMode,
@@ -135,35 +178,8 @@ function readCheckoutUrl(
 
 function readRuntimeConfig():
 StripeRuntimeConfig {
-  const mode = readStripeMode();
-
-  if (mode === "live") {
-    if (
-      process.env.NODE_ENV !==
-      "production"
-    ) {
-      throw new StripeConfigurationError(
-        "STRIPE_LIVE_ENVIRONMENT_FORBIDDEN",
-        "Stripe real solo puede utilizarse en producción.",
-      );
-    }
-
-    const liveEnabled =
-      (
-        process.env
-          .CHECKOUT_LIVE_ENABLED ??
-        ""
-      )
-        .trim()
-        .toLowerCase() === "true";
-
-    if (!liveEnabled) {
-      throw new StripeConfigurationError(
-        "STRIPE_LIVE_DISABLED",
-        "Los pagos reales están bloqueados mediante CHECKOUT_LIVE_ENABLED.",
-      );
-    }
-  }
+  const mode =
+    readValidatedStripeMode();
 
   const secretKey =
     readRequiredEnvironmentVariable(
@@ -255,6 +271,11 @@ Stripe {
   }
 
   return cachedClient.client;
+}
+
+export function getStripeMode():
+StripeMode {
+  return readValidatedStripeMode();
 }
 
 export function getStripeCheckoutConfig() {

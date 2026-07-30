@@ -1621,6 +1621,111 @@ async function assertPublicStatus({
       "OK WEBHOOK 9: concurrencia local serializada",
     );
 
+    /*
+     * 10. El procesamiento interno de un
+     * evento ya verificado no debe depender
+     * de la clave ni de las URLs usadas para
+     * crear nuevas sesiones de checkout.
+     */
+    const decoupledOrder =
+      await createScenarioOrder({
+        product,
+        label: "config-decoupled",
+        orderService,
+        createdOrderIds,
+      });
+
+    const decoupledEvent =
+      createEvent({
+        order: decoupledOrder,
+
+        type:
+          "checkout.session.completed",
+      });
+
+    createdEventIds.add(
+      decoupledEvent.id,
+    );
+
+    const checkoutConfiguration = {
+      STRIPE_SECRET_KEY:
+        process.env
+          .STRIPE_SECRET_KEY,
+
+      CHECKOUT_SUCCESS_URL:
+        process.env
+          .CHECKOUT_SUCCESS_URL,
+
+      CHECKOUT_CANCEL_URL:
+        process.env
+          .CHECKOUT_CANCEL_URL,
+    };
+
+    delete process.env
+      .STRIPE_SECRET_KEY;
+
+    delete process.env
+      .CHECKOUT_SUCCESS_URL;
+
+    delete process.env
+      .CHECKOUT_CANCEL_URL;
+
+    let decoupledResult;
+
+    try {
+      decoupledResult =
+        await webhookService
+          .procesarEventoStripeSeguro(
+            decoupledEvent,
+          );
+    } finally {
+      for (
+        const [key, value]
+        of Object.entries(
+          checkoutConfiguration,
+        )
+      ) {
+        if (
+          typeof value ===
+          "undefined"
+        ) {
+          delete process.env[key];
+        } else {
+          process.env[key] =
+            value;
+        }
+      }
+    }
+
+    assert.equal(
+      decoupledResult.accion,
+      "esperando_pago",
+    );
+
+    assert.equal(
+      decoupledResult.duplicado,
+      false,
+    );
+
+    const decoupledRecord =
+      await getEventRecord(
+        decoupledEvent.id,
+      );
+
+    assert.equal(
+      decoupledRecord.procesado,
+      true,
+    );
+
+    assert.equal(
+      decoupledRecord.intentos,
+      1,
+    );
+
+    console.log(
+      "OK WEBHOOK 10: procesamiento independiente de la configuración del checkout",
+    );
+
     console.log(
       "\nRESULTADO: CICLO DE VIDA DEL WEBHOOK SUPERADO",
     );

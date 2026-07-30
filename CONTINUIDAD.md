@@ -1053,3 +1053,17 @@ La confianza en proxy queda desactivada por defecto mediante `TRUST_PROXY=false`
 También se añadió una prueba permanente que confirma dos defensas distintas: los prefijos `/api/auth` y `/api/connect` quedan bloqueados por el middleware, y el rol público no dispone de permisos sobre la colección de usuarios.
 
 El límite distribuido continúa pendiente de la infraestructura real.
+
+# 22. ACTUALIZACIÓN — SEPARACIÓN DE CONFIGURACIÓN STRIPE
+
+**Fecha:** 30 de julio de 2026
+
+El procesamiento interno del webhook dejó de consultar la configuración completa necesaria para crear sesiones de checkout.
+
+La validación del modo `test` o `live` se mantiene centralizada y conserva los bloqueos de producción. Sin embargo:
+
+* procesar un evento ya autenticado solo requiere el modo validado;
+* crear una sesión sigue requiriendo `STRIPE_SECRET_KEY`, `CHECKOUT_SUCCESS_URL` y `CHECKOUT_CANCEL_URL`;
+* verificar la firma HTTP sigue requiriendo `STRIPE_WEBHOOK_SECRET`.
+
+La suite demuestra que un evento soportado puede procesarse sin clave de API ni URLs de checkout, evitando que una configuración ajena impida registrar un pago ya recibido.
