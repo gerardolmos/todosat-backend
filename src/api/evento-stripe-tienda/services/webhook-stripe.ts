@@ -11,6 +11,12 @@ const PEDIDO_TIENDA_UID =
 const EVENTO_STRIPE_TIENDA_UID =
   "api::evento-stripe-tienda.evento-stripe-tienda" as const;
 
+const eventosStripeEnProceso =
+  new Map<
+    string,
+    Promise<ResultadoWebhookStripe>
+  >();
+
 const SUPPORTED_EVENT_TYPES = new Set([
   "checkout.session.completed",
   "checkout.session.async_payment_succeeded",
@@ -287,6 +293,64 @@ async function getOrCreateEventRecord(
 
 export async function
 procesarEventoStripeSeguro({
+  strapi,
+  event,
+}: {
+  strapi: Core.Strapi;
+  event: Stripe.Event;
+}): Promise<ResultadoWebhookStripe> {
+  /*
+   * Dos peticiones concurrentes dentro de la
+   * misma instancia comparten la promesa del
+   * primer procesamiento. La segunda espera
+   * su resultado y se clasifica como duplicada
+   * sin repetir efectos ni intentos.
+   */
+  const processing =
+    eventosStripeEnProceso.get(
+      event.id,
+    );
+
+  if (processing) {
+    await processing;
+
+    return {
+      eventId: event.id,
+      tipoEvento: event.type,
+      ignorado: false,
+      duplicado: true,
+      accion: "sin_cambios",
+    };
+  }
+
+  const currentProcessing =
+    procesarEventoStripeSinBloqueo({
+      strapi,
+      event,
+    });
+
+  eventosStripeEnProceso.set(
+    event.id,
+    currentProcessing,
+  );
+
+  try {
+    return await currentProcessing;
+  } finally {
+    if (
+      eventosStripeEnProceso.get(
+        event.id,
+      ) === currentProcessing
+    ) {
+      eventosStripeEnProceso.delete(
+        event.id,
+      );
+    }
+  }
+}
+
+async function
+procesarEventoStripeSinBloqueo({
   strapi,
   event,
 }: {

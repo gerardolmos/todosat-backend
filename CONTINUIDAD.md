@@ -1023,3 +1023,19 @@ Estas decisiones proceden del cuestionario respondido por el usuario antes de la
 La reconstrucción del estado real queda **COMPLETADA Y VALIDADA**.
 
 El proyecto puede continuar desde la evidencia recuperada. No está listo para producción y no debe aceptar pagos reales. El límite actual consiste en avanzar técnicamente hasta que la siguiente decisión dependa exclusivamente de información empresarial, contractual o credenciales que todavía no existen.
+
+# 20. ACTUALIZACIÓN — BLOQUEO CONCURRENTE DEL WEBHOOK
+
+**Fecha:** 30 de julio de 2026
+
+Dentro del Punto de Control 0 se añadió serialización por `event.id` para las entregas simultáneas recibidas por una misma instancia de Strapi.
+
+La primera petición registra una promesa en curso. Las peticiones concurrentes con el mismo identificador esperan esa promesa y, si termina correctamente, responden como duplicadas sin repetir actualizaciones ni incrementar el número de intentos.
+
+La protección persistente anterior se mantiene para reenvíos posteriores: identificador único del evento, registro de procesamiento y comprobación del estado del pedido.
+
+La suite de integración exige una única ejecución principal, una única respuesta duplicada, un solo intento persistido y un único cambio del pedido a `Pagado`.
+
+## Límite pendiente de activación
+
+Esta protección cubre una instancia de Node/Strapi. Antes de desplegar varias instancias deberá incorporarse una cola persistente o un bloqueo distribuido compatible con la base de datos y la infraestructura definitivas. Esa topología todavía no existe y no debe inventarse.

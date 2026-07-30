@@ -1494,6 +1494,133 @@ async function assertPublicStatus({
       "OK WEBHOOK 8: matriz de manipulaciones rechazada",
     );
 
+    /*
+     * 9. Dos entregas simultáneas dentro de
+     * la misma instancia solo pueden ejecutar
+     * una vez los efectos del evento.
+     */
+    const concurrentOrder =
+      await createScenarioOrder({
+        product,
+        label: "concurrent",
+        orderService,
+        createdOrderIds,
+      });
+
+    const concurrentPaymentIntentId =
+      `pi_test_concurrent_${randomSuffix()}`;
+
+    const concurrentEvent =
+      createEvent({
+        order: concurrentOrder,
+
+        type:
+          "checkout.session.completed",
+
+        sessionOverrides: {
+          payment_status:
+            "paid",
+
+          payment_intent:
+            concurrentPaymentIntentId,
+        },
+      });
+
+    createdEventIds.add(
+      concurrentEvent.id,
+    );
+
+    const concurrentResults =
+      await Promise.all([
+        webhookService
+          .procesarEventoStripeSeguro(
+            concurrentEvent,
+          ),
+
+        webhookService
+          .procesarEventoStripeSeguro(
+            concurrentEvent,
+          ),
+      ]);
+
+    const primaryResults =
+      concurrentResults.filter(
+        (result) =>
+          result.duplicado ===
+          false,
+      );
+
+    const duplicateResults =
+      concurrentResults.filter(
+        (result) =>
+          result.duplicado ===
+          true,
+      );
+
+    assert.equal(
+      primaryResults.length,
+      1,
+      "Solo una entrega debe procesar el evento.",
+    );
+
+    assert.equal(
+      duplicateResults.length,
+      1,
+      "La segunda entrega debe clasificarse como duplicada.",
+    );
+
+    assert.equal(
+      primaryResults[0].accion,
+      "pedido_pagado",
+    );
+
+    assert.equal(
+      duplicateResults[0].accion,
+      "sin_cambios",
+    );
+
+    const concurrentStored =
+      await getStoredOrder(
+        concurrentOrder
+          .pedidoDocumentId,
+      );
+
+    assert.equal(
+      concurrentStored.estado,
+      "Pagado",
+    );
+
+    assert.equal(
+      concurrentStored
+        .stripe_payment_intent_id,
+      concurrentPaymentIntentId,
+    );
+
+    const concurrentRecord =
+      await getEventRecord(
+        concurrentEvent.id,
+      );
+
+    assert.equal(
+      concurrentRecord.procesado,
+      true,
+    );
+
+    assert.equal(
+      concurrentRecord.intentos,
+      1,
+      "La entrega duplicada no debe crear otro intento.",
+    );
+
+    assert.equal(
+      concurrentRecord.error,
+      null,
+    );
+
+    console.log(
+      "OK WEBHOOK 9: concurrencia local serializada",
+    );
+
     console.log(
       "\nRESULTADO: CICLO DE VIDA DEL WEBHOOK SUPERADO",
     );
