@@ -94,6 +94,7 @@ const config = ({
     },
     'global::security-response-headers',
     'global::block-unused-user-auth',
+    'global::block-store-public-api',
     'strapi::query',
     {
       name: 'strapi::body',
