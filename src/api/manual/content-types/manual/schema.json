@@ -27,6 +27,9 @@
       "type": "text",
       "maxLength": 300
     },
+    "contenido": {
+      "type": "blocks"
+    },
     "archivo_pdf": {
       "type": "media",
       "multiple": false,
@@ -100,6 +103,14 @@
       "relation": "manyToMany",
       "target": "api::noticia.noticia",
       "inversedBy": "manuales"
+    },
+    "descatalogado": {
+      "type": "boolean",
+      "default": false
+    },
+    "discontinuado": {
+      "type": "boolean",
+      "default": false
     }
   }
 }

@@ -94,7 +94,19 @@
         "Amplificador",
         "IoT",
         "Marítimo",
-        "Movilidad"
+        "Movilidad",
+        "Gateway",
+        "Energía",
+        "Seguimiento",
+        "Montaje",
+        "Control",
+        "Instalación",
+        "Medición",
+        "Emergencia",
+        "Telefonía",
+        "Gestión",
+        "Red",
+        "Protección"
       ]
     },
     "operador": {
@@ -121,6 +133,14 @@
       "relation": "oneToMany",
       "target": "api::producto-tienda.producto-tienda",
       "mappedBy": "hardware"
+    },
+    "descatalogado": {
+      "type": "boolean",
+      "default": false
+    },
+    "discontinuado": {
+      "type": "boolean",
+      "default": false
     }
   }
 }

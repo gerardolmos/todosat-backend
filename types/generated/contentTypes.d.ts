@@ -680,6 +680,7 @@ export interface ApiHardwareHardware extends Struct.CollectionTypeSchema {
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    descatalogado: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
     descripcion_completa: Schema.Attribute.Blocks;
     descripcion_corta: Schema.Attribute.Text &
       Schema.Attribute.Required &
@@ -687,6 +688,7 @@ export interface ApiHardwareHardware extends Struct.CollectionTypeSchema {
         maxLength: 300;
         minLength: 20;
       }>;
+    discontinuado: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
     galeria: Schema.Attribute.Media<'images', true>;
     imagen_principal: Schema.Attribute.Media<'files' | 'images'>;
     latencia: Schema.Attribute.Integer &
@@ -738,6 +740,18 @@ export interface ApiHardwareHardware extends Struct.CollectionTypeSchema {
         'IoT',
         'Mar\u00EDtimo',
         'Movilidad',
+        'Gateway',
+        'Energ\u00EDa',
+        'Seguimiento',
+        'Montaje',
+        'Control',
+        'Instalaci\u00F3n',
+        'Medici\u00F3n',
+        'Emergencia',
+        'Telefon\u00EDa',
+        'Gesti\u00F3n',
+        'Red',
+        'Protecci\u00F3n',
       ]
     > &
       Schema.Attribute.Required;
@@ -909,13 +923,16 @@ export interface ApiManualManual extends Struct.CollectionTypeSchema {
     activo: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
     ano_publicacion: Schema.Attribute.Integer;
     archivo_pdf: Schema.Attribute.Media<'files'>;
+    contenido: Schema.Attribute.Blocks;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    descatalogado: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
     descripcion: Schema.Attribute.Text &
       Schema.Attribute.SetMinMaxLength<{
         maxLength: 300;
       }>;
+    discontinuado: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
     hardwares: Schema.Attribute.Relation<
       'manyToMany',
       'api::hardware.hardware'
@@ -1054,7 +1071,7 @@ export interface ApiOperadorOperador extends Struct.CollectionTypeSchema {
     descripcion_corta: Schema.Attribute.String &
       Schema.Attribute.Required &
       Schema.Attribute.SetMinMaxLength<{
-        maxLength: 40;
+        maxLength: 160;
       }>;
     descripcion_home: Schema.Attribute.Text &
       Schema.Attribute.SetMinMaxLength<{

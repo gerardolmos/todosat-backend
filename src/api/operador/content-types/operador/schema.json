@@ -40,7 +40,7 @@
     },
     "descripcion_corta": {
       "type": "string",
-      "maxLength": 40,
+      "maxLength": 160,
       "required": true
     },
     "descripcion_completa": {
