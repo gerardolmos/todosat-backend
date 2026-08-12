@@ -31,6 +31,8 @@ const config = ({ env }: Core.Config.Shared.ConfigParams): Core.Config.Plugin =>
             region: bucketRegion || 'auto',
             params: {
               Bucket: bucketName,
+              ACL: 'private',
+              signedUrlExpires: 15 * 60,
             },
           },
         },
