@@ -39,10 +39,49 @@ const config = ({
       ),
     );
 
+  const bucketEndpoint = env('BUCKET_ENDPOINT', '');
+  const bucketName = env('BUCKET_NAME', '');
+
+  const bucketMediaOrigin = (() => {
+    if (!bucketEndpoint || !bucketName) {
+      return null;
+    }
+
+    try {
+      const endpoint = new URL(bucketEndpoint);
+
+      return `${endpoint.protocol}//${bucketName}.${endpoint.host}`;
+    } catch {
+      return null;
+    }
+  })();
+
   return [
     'strapi::logger',
     'strapi::errors',
-    'strapi::security',
+    {
+      name: 'strapi::security',
+      config: {
+        contentSecurityPolicy: {
+          useDefaults: true,
+          directives: {
+            'img-src': [
+              "'self'",
+              'data:',
+              'blob:',
+              'https://market-assets.strapi.io',
+              ...(bucketMediaOrigin ? [bucketMediaOrigin] : []),
+            ],
+            'media-src': [
+              "'self'",
+              'data:',
+              'blob:',
+              ...(bucketMediaOrigin ? [bucketMediaOrigin] : []),
+            ],
+          },
+        },
+      },
+    },
     {
       name: 'strapi::cors',
       config: {
