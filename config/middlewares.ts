@@ -42,23 +42,6 @@ const config = ({
       ),
     );
 
-  const bucketEndpoint = env('BUCKET_ENDPOINT', '');
-  const bucketName = env('BUCKET_NAME', '');
-
-  const bucketMediaOrigin = (() => {
-    if (!bucketEndpoint || !bucketName) {
-      return null;
-    }
-
-    try {
-      const endpoint = new URL(bucketEndpoint);
-
-      return `${endpoint.protocol}//${bucketName}.${endpoint.host}`;
-    } catch {
-      return null;
-    }
-  })();
-
   return [
     'strapi::logger',
     'strapi::errors',
@@ -74,14 +57,12 @@ const config = ({
               'blob:',
               'https://market-assets.strapi.io',
               CLOUDINARY_MEDIA_ORIGIN,
-              ...(bucketMediaOrigin ? [bucketMediaOrigin] : []),
             ],
             'media-src': [
               "'self'",
               'data:',
               'blob:',
               CLOUDINARY_MEDIA_ORIGIN,
-              ...(bucketMediaOrigin ? [bucketMediaOrigin] : []),
             ],
           },
         },
