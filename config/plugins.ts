@@ -1,6 +1,54 @@
 import type { Core } from '@strapi/strapi';
 
 const config = ({ env }: Core.Config.Shared.ConfigParams): Core.Config.Plugin => {
+  const cloudinaryName = env('CLOUDINARY_NAME');
+  const cloudinaryKey = env('CLOUDINARY_KEY');
+  const cloudinarySecret = env('CLOUDINARY_SECRET');
+
+  const cloudinaryValues = [
+    cloudinaryName,
+    cloudinaryKey,
+    cloudinarySecret,
+  ];
+
+  const cloudinaryEnabled =
+    cloudinaryValues.every(Boolean);
+
+  const cloudinaryPartiallyConfigured =
+    cloudinaryValues.some(Boolean) &&
+    !cloudinaryEnabled;
+
+  if (cloudinaryPartiallyConfigured) {
+    throw new Error(
+      'Cloudinary upload provider is only partially configured',
+    );
+  }
+
+  if (cloudinaryEnabled) {
+    return {
+      upload: {
+        config: {
+          provider: 'cloudinary',
+          providerOptions: {
+            cloud_name: cloudinaryName,
+            api_key: cloudinaryKey,
+            api_secret: cloudinarySecret,
+          },
+          actionOptions: {
+            upload: {},
+            uploadStream: {},
+            delete: {},
+          },
+        },
+      },
+    };
+  }
+
+  /*
+   * Fallback transicional.
+   * Se eliminará en cuanto Cloudinary quede
+   * validado en producción.
+   */
   const bucketName = env('BUCKET_NAME');
   const bucketEndpoint = env('BUCKET_ENDPOINT');
   const bucketRegion = env('BUCKET_REGION');

@@ -10,6 +10,9 @@ const PRODUCTION_CORS_ORIGINS = [
   'https://www.todosatcom.com',
 ] as const;
 
+const CLOUDINARY_MEDIA_ORIGIN =
+  'https://res.cloudinary.com';
+
 function normalizeOrigins(
   origins: string[],
 ): string[] {
@@ -70,12 +73,14 @@ const config = ({
               'data:',
               'blob:',
               'https://market-assets.strapi.io',
+              CLOUDINARY_MEDIA_ORIGIN,
               ...(bucketMediaOrigin ? [bucketMediaOrigin] : []),
             ],
             'media-src': [
               "'self'",
               'data:',
               'blob:',
+              CLOUDINARY_MEDIA_ORIGIN,
               ...(bucketMediaOrigin ? [bucketMediaOrigin] : []),
             ],
           },
