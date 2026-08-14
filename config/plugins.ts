@@ -1,6 +1,13 @@
 import type { Core } from '@strapi/strapi';
 
 const config = ({ env }: Core.Config.Shared.ConfigParams): Core.Config.Plugin => {
+  const basePlugins: Core.Config.Plugin = {
+    'publicacion-web': {
+      enabled: true,
+      resolve: 'src/plugins/publicacion-web',
+    },
+  };
+
   const cloudinaryName = env('CLOUDINARY_NAME');
   const cloudinaryKey = env('CLOUDINARY_KEY');
   const cloudinarySecret = env('CLOUDINARY_SECRET');
@@ -34,10 +41,11 @@ const config = ({ env }: Core.Config.Shared.ConfigParams): Core.Config.Plugin =>
       );
     }
 
-    return {};
+    return basePlugins;
   }
 
   return {
+    ...basePlugins,
     upload: {
       config: {
         provider: 'cloudinary',

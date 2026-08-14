@@ -1,0 +1,1 @@
+export const PLUGIN_ID = "publicacion-web";

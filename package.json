@@ -4,7 +4,7 @@
   "private": true,
   "description": "A Strapi application",
   "scripts": {
-    "build": "strapi build",
+    "build": "npm run build:publicacion-web && strapi build",
     "console": "strapi console",
     "deploy": "strapi deploy",
     "dev": "strapi develop",
@@ -13,7 +13,8 @@
     "strapi": "strapi",
     "upgrade": "npx @strapi/upgrade latest",
     "upgrade:dry": "npx @strapi/upgrade latest --dry",
-    "test:tienda": "bash scripts/test-tienda.sh"
+    "test:tienda": "bash scripts/test-tienda.sh",
+    "build:publicacion-web": "npm run build --workspace=publicacion-web"
   },
   "dependencies": {
     "@strapi/plugin-cloud": "5.51.0",
@@ -46,5 +47,8 @@
     "ws": "8.21.0",
     "tar": "7.5.19",
     "sharp": "0.35.3"
-  }
+  },
+  "workspaces": [
+    "src/plugins/publicacion-web"
+  ]
 }
