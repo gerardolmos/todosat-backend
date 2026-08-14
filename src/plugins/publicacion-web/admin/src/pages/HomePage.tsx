@@ -1,3 +1,12 @@
+import { useState } from "react";
+
+import {
+  Page,
+  useAPIErrorHandler,
+  useFetchClient,
+  useNotification,
+} from "@strapi/strapi/admin";
+
 import {
   Box,
   Button,
@@ -7,8 +16,44 @@ import {
 } from "@strapi/design-system";
 
 const HomePage = () => {
+  const [isPublishing, setIsPublishing] = useState(false);
+
+  const { post } = useFetchClient();
+  const { formatAPIError } = useAPIErrorHandler();
+  const { toggleNotification } = useNotification();
+
+  const handlePublish = async () => {
+    if (isPublishing) {
+      return;
+    }
+
+    setIsPublishing(true);
+
+    try {
+      await post("/publicacion-web/publish");
+
+      toggleNotification({
+        type: "success",
+        message: "Publicación solicitada correctamente.",
+      });
+    } catch (error) {
+      toggleNotification({
+        type: "danger",
+        message: formatAPIError(
+          error as Parameters<typeof formatAPIError>[0],
+        ),
+      });
+    } finally {
+      setIsPublishing(false);
+    }
+  };
+
   return (
     <Main>
+      <Page.Title>
+        Publicar cambios en la web
+      </Page.Title>
+
       <Box padding={8}>
         <Flex
           direction="column"
@@ -50,15 +95,22 @@ const HomePage = () => {
                 de editar y publicar los contenidos del día.
               </Typography>
 
-              <Button disabled>
-                Publicar cambios en la web
+              <Button
+                onClick={handlePublish}
+                loading={isPublishing}
+                disabled={isPublishing}
+              >
+                {isPublishing
+                  ? "Publicando..."
+                  : "Publicar cambios en la web"}
               </Button>
 
               <Typography
                 variant="pi"
                 textColor="neutral600"
               >
-                Conexión con Netlify pendiente.
+                La publicación solo se ejecutará cuando
+                Netlify esté configurado en el servidor.
               </Typography>
             </Flex>
           </Box>

@@ -1,12 +1,33 @@
-import type { Core } from "@strapi/strapi";
+const controller = () => ({
+  async publish(ctx) {
+    const hookUrl =
+      process.env.NETLIFY_BUILD_HOOK_URL?.trim();
 
-const controller = ({ strapi }: { strapi: Core.Strapi }) => ({
-  index(ctx) {
-    ctx.body = strapi
-      .plugin("publicacion-web")
-      // the name of the service file & the method.
-      .service("service")
-      .getWelcomeMessage();
+    if (!hookUrl) {
+      ctx.status = 503;
+      ctx.body = {
+        data: null,
+        error: {
+          status: 503,
+          name: "ServiceUnavailableError",
+          message:
+            "La publicación web todavía no está configurada.",
+        },
+      };
+
+      return;
+    }
+
+    ctx.status = 501;
+    ctx.body = {
+      data: null,
+      error: {
+        status: 501,
+        name: "NotImplementedError",
+        message:
+          "La conexión con Netlify todavía no está activada.",
+      },
+    };
   },
 });
 

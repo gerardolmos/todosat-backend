@@ -15,7 +15,12 @@ const plugin: StrapiApp["appPlugins"][string] = {
         defaultMessage: "Publicación web",
       },
       Component: () => import("./pages/App"),
-      permissions: [],
+      permissions: [
+        {
+          action: "plugin::publicacion-web.publish",
+          subject: null,
+        },
+      ],
     });
 
     app.registerPlugin({
