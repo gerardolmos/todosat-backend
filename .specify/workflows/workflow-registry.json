@@ -1,0 +1,13 @@
+{
+  "schema_version": "1.0",
+  "workflows": {
+    "speckit": {
+      "name": "Full SDD Cycle",
+      "version": "1.0.1",
+      "description": "TodoSatcom: specify \u2192 clarify \u2192 plan \u2192 tasks \u2192 analyze \u2192 implement \u2192 converge",
+      "source": "bundled",
+      "installed_at": "2026-10-04T18:13:36.865880+00:00",
+      "updated_at": "2026-10-04T18:13:36.865887+00:00"
+    }
+  }
+}
