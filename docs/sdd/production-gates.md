@@ -27,4 +27,4 @@ Registrar la evidencia aplicable a cada gate antes de ejecutar la operación. La
 - No presumir aislamiento por trabajar localmente o por usar una URL de preview.
 - No dar por satisfechos gates mediante el cierre de FASE 0: sus pendientes siguen abiertos.
 
-Consultar [risks.md](risks.md), especialmente RISK-ENV-ISOLATION, RISK-BACKUP, RISK-STAGING y los riesgos de autodeploy. El repositorio histórico local SDD se conserva sin cambios. Estos documentos se incorporan localmente a todosat-backend, repositorio de implementación con vía de despliegue; la documentación no debe convertirse en una vía indirecta de publicación. La transición sigue EN CURSO.
+Consultar [risks.md](risks.md), especialmente RISK-ENV-ISOLATION, RISK-BACKUP, RISK-STAGING y los riesgos de autodeploy. El repositorio histórico local SDD se conserva sin cambios. Estos documentos se custodian en todosat-backend, repositorio de implementación con vía de despliegue; la documentación no debe convertirse en una vía indirecta de publicación. La transición fue completada y aceptada por Gerard el 2026-10-12; los gates mantienen su vigencia.

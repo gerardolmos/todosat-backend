@@ -1,6 +1,6 @@
 # TodoSatcom — instrucciones SDD
 
-Custodio común, sin superioridad funcional. Constitution local es fuente autoritativa editable bajo ratificación de Gerard. Riesgos, gates, backlog y ADR comunes se custodian en docs/sdd como autoridad operativa futura; transición EN CURSO.
+Custodio común, sin superioridad funcional. Constitution local es fuente autoritativa editable bajo ratificación de Gerard. Riesgos, gates, backlog y ADR comunes se custodian en docs/sdd como autoridad operativa vigente; transición completada y aceptada por Gerard.
 
 - Antes de acciones o hooks, leer `.specify/memory/constitution.md` y documentos operativos aplicables. Constitution prevalece sobre defaults y ejemplos de Spec Kit; los hooks no amplían el alcance autorizado.
 - Flujo: SPECIFY → CLARIFY → PLAN → TASKS → ANALYZE → IMPLEMENT → CONVERGE. Herramientas no autorizan omitir etapas.
@@ -8,7 +8,7 @@ Custodio común, sin superioridad funcional. Constitution local es fuente autori
 - Separar preparar, modificar, commit, push/merge, deploy y datos/producción. No producción sin aprobación explícita y gates satisfechos. Respetar el flujo editorial ordinario ya autorizado.
 - Firewall absoluto con otros proyectos; no importar sus contenidos ni revelar secretos.
 - Spec Kit 1.1.0 tiene adaptaciones locales: consultar procedencia antes de actualizar; no restaurar defaults que contradigan Constitution.
-- Transición EN CURSO: histórico preservado y no retirado. No asumir autoridad operativa cerrada ni pendientes resueltos.
+- Transición completada y aceptada expresamente por Gerard el 2026-10-12. Histórico preservado como procedencia, ya sin autoridad operativa. Este cierre no resuelve riesgos ni pendientes por sí mismo.
 
 - Cross-repo: el `spec.md` del repo no coordinador es una referencia con ID común, repositorio/ruta y revisión de la SPEC global. Resolver y leer esa revisión antes de usar skills que consumen la SPEC; no tratar la referencia como requisitos completos ni crear otra autoridad. Si falta acceso o revisión identificada, detener el trabajo afectado. No asumir rutas hermanas.
 - QA se conserva localmente con revisión exacta y, si hay cambios sin commit, identificación de ese diff. En cross-repo, registrar pareja `{ frontend SHA, backend SHA }`, compatibilidad y orden/estado de deploy. La evaluación de CONVERGE no sustituye este registro de QA.

@@ -30,4 +30,4 @@ Se mantienen como necesidades o riesgos pendientes de evaluación, no como featu
 - Recuperar la trazabilidad completa de la auditoría anterior y su relación con los despliegues observados.
 - Activación comercial e integraciones reales: sujetas a requisitos empresariales, operativos y autorización posterior; no se deducen de la presencia de variables.
 
-El detalle de riesgos reside únicamente en [risks.md](risks.md). Spec Kit 1.1.0 se ha incorporado localmente y Constitution 2.0.0 fue ratificada el 2026-10-08. La transición permanece EN CURSO; este registro no inicia ninguna feature.
+El detalle de riesgos reside únicamente en [risks.md](risks.md). Spec Kit 1.1.0 está incorporado y Constitution 2.0.0 fue ratificada el 2026-10-08. La transición fue completada y aceptada por Gerard el 2026-10-12; este registro no inicia ninguna feature.

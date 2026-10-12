@@ -1,5 +1,17 @@
 # Procedencia de la gobernanza SDD
 
+## Cierre aceptado — 2026-10-12
+
+Gerard acepta expresamente el cierre de la adopción SDD. Estado vigente: **COMPLETE**. Backend es custodio de la gobernanza común y frontend mantiene la copia controlada de Constitution 2.0.0.
+
+Revisiones de adopción publicadas y verificadas: backend `7aa335dd901ca87b5f1f28aa2eb0d5c040074473`; frontend `2ebbb0f89dfd5636087c8f293fcd1e76e554f9be`. Constitution idéntica, SHA-256 `496e689579ec2bd9340d9b311ea36ee69e084c47309547d2af02fe1184cb14d7`.
+
+El repositorio histórico SDD y Constitution 1.0.0 permanecen preservados, pero dejan de ser autoridad operativa. El cierre no declara resueltos riesgos ni pendientes. Spec Kit y la arquitectura permanecen sin cambios.
+
+## Registro histórico de adopción inicial
+
+Los estados parciales y referencias sin commit que siguen describen las fechas originales; no son el estado vigente.
+
 - Constitution 1.0.0: ratificada por Gerard el 2026-10-04; preservada sin cambios en el repositorio histórico local SDD.
 - Constitution 2.0.0: ratificada explícitamente por Gerard el 2026-10-08.
 - `todosat-backend` pasa a ser custodio común. La fuente editable de Constitution 2.0.0 es `.specify/memory/constitution.md`; `todosat-frontend` conserva una copia controlada idéntica.
