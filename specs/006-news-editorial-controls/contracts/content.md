@@ -1,0 +1,3 @@
+# Contrato
+Noticias REST published/activo filtradas, destacado boolean true estricto; máximo 7 recientes sin duplicar documentId (fallback id/slug). Recomendados usa api::destacado independiente. Archivo y búsqueda conservan todas las noticias activas. Categoria noticia mantiene documentId al renombrar nombre/slug; Gaming→Regulación/regulacion, Movilidad→Defensa/defensa. No traducción automática en cliente. Redirecciones 301 Netlify solo a rutas generadas y si origen no existe; no wildcard de contenido ajeno. Hardware Movilidad intocable.
+No cambios API de escritura personalizados ni migración de registros.

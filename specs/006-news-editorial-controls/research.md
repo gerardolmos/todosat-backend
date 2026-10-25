@@ -1,0 +1,2 @@
+# Investigación local
+index.astro seleccionaba siete recientes sin filtrar destacado; schema Noticias default true. getDestacados y HomeFeaturedSection son recomendaciones independientes. Categorías provienen del CMS; no enum Gaming/Movilidad en esquema Noticias; Hardware sí tiene Movilidad. Recursos de Regulación/Defensa no localizados por nombres en workspace. No probar causa en producción ni atribuir datos reales.

@@ -88,6 +88,9 @@
     "velocidad_descripcion": {
       "type": "string"
     },
+    "bandas_frecuencia": {
+      "type": "string"
+    },
     "tipo_orbita": {
       "type": "string"
     },

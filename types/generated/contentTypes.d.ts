@@ -1016,7 +1016,7 @@ export interface ApiNoticiaNoticia extends Struct.CollectionTypeSchema {
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
-    destacado: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
+    destacado: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
     fecha_publicacion: Schema.Attribute.Date & Schema.Attribute.Required;
     hardwares: Schema.Attribute.Relation<
       'manyToMany',
@@ -1064,6 +1064,7 @@ export interface ApiOperadorOperador extends Struct.CollectionTypeSchema {
   };
   attributes: {
     activa: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
+    bandas_frecuencia: Schema.Attribute.String;
     cobertura: Schema.Attribute.String;
     cobertura_descripcion: Schema.Attribute.String;
     createdAt: Schema.Attribute.DateTime;
